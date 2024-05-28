@@ -47,6 +47,10 @@ filterByHGNC = function(res, ggr, sym, radius=1e5, field="gene_name") {
   new("ABRIGresource", tbl=ans)
 }
 
+con = DBI::dbConnect(duckdb())
+ll = ABRIGresource( con, "BAL" )
+print(ll)
+
 kk <- filterByHGNC(ll, gloc_hg19, "DSP")
 slot(kk, "tbl") |> group_by(gene,CHR,BP,SNP) |> summarise(n=n())
 
