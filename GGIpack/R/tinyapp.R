@@ -1,9 +1,12 @@
 #' demo app
 #' @import shiny
+#' @import dplyr
+#' @import duckdb
+#' @import EnsDb.Hsapiens.v75
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
 #' @export
-tinyapp = function(con, genelocs) {
+tinyapp = function(con, genelocs =genes(EnsDb.Hsapiens.v75) ) {
  pfiles <<- ABRIGparquet_paths()
  ui = fluidPage(
   sidebarLayout(
@@ -23,7 +26,7 @@ tinyapp = function(con, genelocs) {
    mygene = input$gene
    mytiss = input$tiss
    newres = ABRIGresource(con, input$tiss)
-   kk <- filterByRange(newres, gloc_hg19, mygene, ggr_field="gene_name")
+   kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
   })
  }

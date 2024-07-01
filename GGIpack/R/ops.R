@@ -3,6 +3,9 @@
 #' @param con is a DBI connection (typically duckdb)
 #' @param tissue character(1)
 #' @param space character(1) e.g., "hg19"
+#' @examples
+#' con = DBI::dbConnect(duckdb())
+#' ll = ABRIGresource( con, "BAL" )
 #' @return ABRIGresource instance for the identified tissue
 #' @export
 ABRIGresource = function(con, tissue, space="hg19") {
