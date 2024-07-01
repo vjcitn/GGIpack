@@ -46,7 +46,7 @@ filterByRange = function(res, ggr, tag, radius=1e5, ggr_field="gene_name") {
   ok = ggr[which(mcols(ggr)[[ggr_field]] == tag)]
   stopifnot(width(ok)>0)
   anac = function(x) as.numeric(as.character(x)) # for Rle
-  ans = slot(res, "tbl") |> dplyr::filter(CHR == local(anac(seqnames(ok)[1])), BP >= IRanges::start(ok)-radius, BP<= IRanges::end(ok)+radius)
+  ans = slot(res, "tbl") |> dplyr::filter(CHR == local(anac(seqnames(ok)[1])), BP >= local(IRanges::start(ok)-radius), BP<= local(IRanges::end(ok)+radius))
   new("ABRIGresource", space = slot(res, "space"), tbl=ans)
 }
 
