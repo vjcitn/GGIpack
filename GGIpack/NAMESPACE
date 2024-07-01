@@ -3,6 +3,8 @@
 export(ABRIGparquet_paths)
 export(ABRIGresource)
 export(filterByRange)
+export(tinyapp)
 exportClasses(ABRIGresource)
 exportClasses(ggiResource)
 import(dplyr)
+import(shiny)
