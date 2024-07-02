@@ -6,7 +6,7 @@
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
 #' @export
-tinyapp = function(con, genelocs =genes(EnsDb.Hsapiens.v75) ) {
+tinyapp = function(con, genelocs = genes(EnsDb.Hsapiens.v75) ) {
  pfiles <<- ABRIGparquet_paths()
  ui = fluidPage(
   sidebarLayout(
@@ -25,7 +25,7 @@ tinyapp = function(con, genelocs =genes(EnsDb.Hsapiens.v75) ) {
   output$stuff = renderPrint({
    mygene = input$gene
    mytiss = input$tiss
-   newres = ABRIGresource(con, input$tiss)
+   newres = ABRIGresource(con, input$tiss, pfiles=pfiles)
    kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
   })

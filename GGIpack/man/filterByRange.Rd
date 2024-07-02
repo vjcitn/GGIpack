@@ -17,6 +17,16 @@ filterByRange(res, ggr, tag, radius = 1e+05, ggr_field = "gene_name")
 
 \item{ggr_field}{character(1) metadata element in mcols(ggr) for filtering}
 }
+\value{
+filterByRange instance for the identifies gene_name or gene_id
+}
 \description{
 filter a GGI (ABRIGresource) instance by range
+}
+\examples{
+con = DBI::dbConnect(duckdb::duckdb())
+ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
+gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75)
+kk <- filterByRange(ll, gloc_hg19, "DSP", ggr_field="gene_name")
+DBI::dbDisconnect(con)
 }
