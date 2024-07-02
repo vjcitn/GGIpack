@@ -4,10 +4,12 @@
 \alias{tinyapp}
 \title{demo app}
 \usage{
-tinyapp(con)
+tinyapp(con, genelocs = genes(EnsDb.Hsapiens.v75))
 }
 \arguments{
 \item{con}{a DBI connection}
+
+\item{genelocs}{a GRanges instance with gene addresses}
 }
 \description{
 demo app

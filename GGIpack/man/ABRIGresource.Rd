@@ -4,7 +4,7 @@
 \alias{ABRIGresource}
 \title{define constructor for ABRIGresource}
 \usage{
-ABRIGresource(con, tissue, space = "hg19")
+ABRIGresource(con, tissue, space = "hg19", pfiles)
 }
 \arguments{
 \item{con}{is a DBI connection (typically duckdb)}
@@ -12,10 +12,16 @@ ABRIGresource(con, tissue, space = "hg19")
 \item{tissue}{character(1)}
 
 \item{space}{character(1) e.g., "hg19"}
+
+\item{pfile}{list of absoulte paths to the data for each tissue.}
 }
 \value{
 ABRIGresource instance for the identified tissue
 }
 \description{
 define constructor for ABRIGresource
+}
+\examples{
+con = DBI::dbConnect(duckdb::duckdb())
+ll = ABRIGresource( con, "BAL" , pfile= ABRIGparquet_paths())
 }
