@@ -13,7 +13,7 @@ ABRIGresource(con, tissue, space = "hg19", pfiles)
 
 \item{space}{character(1) e.g., "hg19"}
 
-\item{pfile}{list of absoulte paths to the data for each tissue.}
+\item{pfiles}{list of absoulte paths to the data for each tissue.}
 }
 \value{
 ABRIGresource instance for the identified tissue
@@ -23,7 +23,7 @@ define constructor for ABRIGresource
 }
 \examples{
 con = DBI::dbConnect(duckdb::duckdb())
-ll = ABRIGresource( con, "BAL" , pfile= ABRIGparquet_paths())
+ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
 print(ll)
 DBI::dbDisconnect(con)
 }

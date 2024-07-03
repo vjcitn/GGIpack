@@ -3,10 +3,10 @@
 #' @param con is a DBI connection (typically duckdb)
 #' @param tissue character(1)
 #' @param space character(1) e.g., "hg19"
-#' @param pfile list of absoulte paths to the data for each tissue. 
+#' @param pfiles list of absoulte paths to the data for each tissue. 
 #' @examples
 #' con = DBI::dbConnect(duckdb::duckdb())
-#' ll = ABRIGresource( con, "BAL" , pfile= ABRIGparquet_paths())
+#' ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
 #' print(ll)
 #' DBI::dbDisconnect(con)
 #' @return ABRIGresource instance for the identified tissue
@@ -30,8 +30,9 @@ ABRIGresource = function(con, tissue, space="hg19", pfiles) {
 #' @examples
 #' con = DBI::dbConnect(duckdb::duckdb())
 #' ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
-#' gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75)
+#' gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
 #' kk <- filterByRange(ll, gloc_hg19, "DSP", ggr_field="gene_name")
+#' print(kk)
 #' DBI::dbDisconnect(con)
 #' @return filterByRange instance for the identifies gene_name or gene_id 
 #' @export
