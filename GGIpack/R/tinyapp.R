@@ -89,10 +89,17 @@ helpText("get rid of radio buttons!"),
    kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
    })
+  output$CD4stim = renderPrint({
+   mygene = input$gene 
+   BEBres = ABRIGresource(con, "CD4Stim")
+   kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
+   kk@tbl
+   })
   output$alltabs = renderUI({
    tabsetPanel(
     tabPanel("BAL", helpText("A"), verbatimTextOutput("BALstuff")),
-    tabPanel("BronchEpiBrush", verbatimTextOutput("BEBstuff"))
+    tabPanel("BronchEpiBrush", verbatimTextOutput("BEBstuff")),
+    tabPanel("CD4stim", verbatimTextOutput("CD4stim"))
     )
    })
  }
