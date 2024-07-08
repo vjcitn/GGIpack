@@ -4,11 +4,22 @@
 \alias{tinyapp}
 \title{demo app}
 \usage{
-tinyapp(con)
+tinyapp(con, genelocs)
 }
 \arguments{
 \item{con}{a DBI connection}
+
+\item{genelocs}{a GRanges instance with gene addresses}
 }
 \description{
 demo app
+}
+\note{
+Very specialized, just has a few genes, uses specific
+field from genelocs argument.
+}
+\examples{
+gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
+con = DBI::dbConnect(duckdb::duckdb())
+tinyapp(con, gloc_hg19)
 }

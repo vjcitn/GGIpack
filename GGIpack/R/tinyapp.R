@@ -2,6 +2,12 @@
 #' @import shiny
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
+#' @note Very specialized, just has a few genes, uses specific
+#' field from genelocs argument.
+#' @examples
+#' gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
+#' con = DBI::dbConnect(duckdb::duckdb())
+#' tinyapp(con, gloc_hg19)
 #' @export
 tinyapp = function(con, genelocs) {
  pfiles <<- ABRIGparquet_paths()
@@ -23,7 +29,7 @@ tinyapp = function(con, genelocs) {
    mygene = input$gene
    mytiss = input$tiss
    newres = ABRIGresource(con, input$tiss)
-   kk <- filterByRange(newres, gloc_hg19, mygene, ggr_field="gene_name")
+   kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
   })
  }
