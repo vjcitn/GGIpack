@@ -3,10 +3,11 @@
 #' @import dplyr
 #' @import duckdb
 #' @import EnsDb.Hsapiens.v75
+#' @import ensembldb
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
 #' @export
-tinyapp = function(con, genelocs = genes(EnsDb.Hsapiens.v75) ) {
+tinyapp = function(con, genelocs = ensembldb::genes(EnsDb.Hsapiens.v75) ) {
  pfiles <<- ABRIGparquet_paths()
  ui = fluidPage(
   sidebarLayout(

@@ -28,5 +28,6 @@ con = DBI::dbConnect(duckdb::duckdb())
 ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
 gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
 kk <- filterByRange(ll, gloc_hg19, "DSP", ggr_field="gene_name")
+print(kk)
 DBI::dbDisconnect(con)
 }
