@@ -73,11 +73,26 @@ helpText("get rid of radio buttons!"),
    kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
   })
+#
+# highly repetitious, use reactive better or build a list, possibly
+# parallelized
+#
+  output$BALstuff = renderPrint({
+   mygene = input$gene 
+   BALres = ABRIGresource(con, "BAL")
+   kk <- filterByRange(BALres, genelocs, mygene, ggr_field="gene_name")
+   kk@tbl
+   })
+  output$BEBstuff = renderPrint({
+   mygene = input$gene 
+   BEBres = ABRIGresource(con, "BroncEpiBrush")
+   kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
+   kk@tbl
+   })
   output$alltabs = renderUI({
    tabsetPanel(
-    tabPanel("BAL", helpText("A"), verbatimTextOutput("stuff")),
-    tabPanel("BronchEpiBrush", helpText("A")),
-    tabPanel("CD4stim", helpText("A"))
+    tabPanel("BAL", helpText("A"), verbatimTextOutput("BALstuff")),
+    tabPanel("BronchEpiBrush", verbatimTextOutput("BEBstuff"))
     )
    })
  }
