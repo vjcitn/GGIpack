@@ -58,8 +58,6 @@ tinyapp2 = function(con, genelocs) {
   sidebarLayout(
    sidebarPanel(
     helpText("GGI demo"),
-helpText("get rid of radio buttons!"),
-    radioButtons("tiss", "tissue", names(pfiles)),
     selectInput("gene", "gene", c("ORMDL3", "DSP", "AGL", "DBT", "SASS6"))
     ), 
    mainPanel(
@@ -73,7 +71,7 @@ helpText("get rid of radio buttons!"),
   output$stuff = renderPrint({
    mygene = input$gene
    mytiss = input$tiss
-   newres = ABRIGresource(con, input$tiss)
+   newres = ABRIGresource(con, input$tiss, pfiles = pfiles)
    kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
   })
@@ -83,27 +81,48 @@ helpText("get rid of radio buttons!"),
 #
   output$BALstuff = renderPrint({
    mygene = input$gene 
-   BALres = ABRIGresource(con, "BAL")
+   BALres = ABRIGresource(con, "BAL", pfiles = pfiles)
    kk <- filterByRange(BALres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
    })
   output$BEBstuff = renderPrint({
    mygene = input$gene 
-   BEBres = ABRIGresource(con, "BroncEpiBrush")
+   BEBres = ABRIGresource(con, "BroncEpiBrush", pfiles = pfiles)
    kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
    })
   output$CD4stim = renderPrint({
    mygene = input$gene 
-   BEBres = ABRIGresource(con, "CD4Stim")
+   BEBres = ABRIGresource(con, "CD4Stim", pfiles = pfiles)
    kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
+   })
+   output$CD4Unstim = renderPrint({
+    mygene = input$gene 
+    BEBres = ABRIGresource(con, "CD4Unstim", pfiles = pfiles)
+    kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
+    kk@tbl
+  })
+   output$AlvMacphage = renderPrint({
+     mygene = input$gene 
+     BEBres = ABRIGresource(con, "AlvMacphage", pfiles = pfiles)
+     kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
+     kk@tbl
+   })
+   output$PaxRNA = renderPrint({
+     mygene = input$gene 
+     BEBres = ABRIGresource(con, "PaxRNA", pfiles = pfiles)
+     kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
+     kk@tbl
    })
   output$alltabs = renderUI({
    tabsetPanel(
     tabPanel("BAL", helpText("A"), verbatimTextOutput("BALstuff")),
     tabPanel("BronchEpiBrush", verbatimTextOutput("BEBstuff")),
-    tabPanel("CD4stim", verbatimTextOutput("CD4stim"))
+    tabPanel("CD4stim", verbatimTextOutput("CD4stim")),
+    tabPanel("CD4Unstim", verbatimTextOutput("CD4Unstim")),
+    tabPanel("AlvMacphage", verbatimTextOutput("AlvMacphage")),
+    tabPanel("PaxRNA", verbatimTextOutput("PaxRNA"))
     )
    })
  }
