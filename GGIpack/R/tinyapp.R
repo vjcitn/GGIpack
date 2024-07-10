@@ -1,45 +1,3 @@
-#' demo app
-#' @import shiny
-#' @import dplyr
-#' @import duckdb
-#' @import EnsDb.Hsapiens.v75
-#' @import ensembldb
-#' @param con a DBI connection
-#' @param genelocs a GRanges instance with gene addresses
-#' @note Very specialized, just has a few genes, uses specific
-#' field from genelocs argument.
-#' @examples
-#' gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
-#' con = DBI::dbConnect(duckdb::duckdb())
-#' tinyapp(con, gloc_hg19)
-#' @export
-tinyapp = function(con, genelocs = ensembldb::genes(EnsDb.Hsapiens.v75) ) {
- pfiles <<- ABRIGparquet_paths()
- ui = fluidPage(
-  sidebarLayout(
-   sidebarPanel(
-    helpText("GGI demo"),
-    radioButtons("tiss", "tissue", names(pfiles)),
-    selectInput("gene", "gene", c("ORMDL3", "DSP", "AGL", "DBT", "SASS6"))
-    ), 
-   mainPanel(
-    verbatimTextOutput("stuff")
-    )
-  )
- )   # also need tabs, about etc.
- 
- server = function(input, output) {
-  output$stuff = renderPrint({
-   mygene = input$gene
-   mytiss = input$tiss
-   newres = ABRIGresource(con, input$tiss, pfiles=pfiles)
-   kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
-   kk@tbl
-  })
- }
- 
- runApp(list(ui=ui, server=server))
-}
 
 #' demo app 2
 #' @import shiny
@@ -79,50 +37,56 @@ tinyapp2 = function(con, genelocs) {
 # highly repetitious, use reactive better or build a list, possibly
 # parallelized
 #
-  output$BALstuff = renderPrint({
-   mygene = input$gene 
-   BALres = ABRIGresource(con, "BAL", pfiles = pfiles)
-   kk <- filterByRange(BALres, genelocs, mygene, ggr_field="gene_name")
-   kk@tbl
+  
+  allrefs = reactive({
+   ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
+                  "AlvMacphage", "PaxRNA")
+   mygene = input$gene
+   allres = lapply(ttypes, function(x) ABRIGresource(con, x, pfiles=pfiles))
+   allfilt = lapply(allres, function(x) filterByRange(x,
+         genelocs, mygene, ggr_field="gene_name"))
+   names(allfilt) = ttypes
+   allfilt
    })
-  output$BEBstuff = renderPrint({
-   mygene = input$gene 
-   BEBres = ABRIGresource(con, "BroncEpiBrush", pfiles = pfiles)
-   kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
-   kk@tbl
+  dorounds = function(mydf) {
+   mydf$P = round(mydf$P, 3)
+   mydf$SE = round(mydf$SE, 3)
+   mydf$MAF = round(mydf$MAF, 3)
+   mydf$BETA = round(mydf$BETA, 3)
+   mydf |> dplyr::select(-score, -seqnames)
+   }
+  output$BALstuff = DT::renderDataTable({
+   refs = allrefs()
+   refs[["BAL"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })
-  output$CD4stim = renderPrint({
-   mygene = input$gene 
-   BEBres = ABRIGresource(con, "CD4Stim", pfiles = pfiles)
-   kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
-   kk@tbl
+  output$BEBstuff = DT::renderDataTable({
+   refs = allrefs()
+   refs[["BroncEpiBrush"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })
-   output$CD4Unstim = renderPrint({
-    mygene = input$gene 
-    BEBres = ABRIGresource(con, "CD4Unstim", pfiles = pfiles)
-    kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
-    kk@tbl
-  })
-   output$AlvMacphage = renderPrint({
-     mygene = input$gene 
-     BEBres = ABRIGresource(con, "AlvMacphage", pfiles = pfiles)
-     kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
-     kk@tbl
+  output$CD4stim = DT::renderDataTable({
+   refs = allrefs()
+   refs[["CD4Stim"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })
-   output$PaxRNA = renderPrint({
-     mygene = input$gene 
-     BEBres = ABRIGresource(con, "PaxRNA", pfiles = pfiles)
-     kk <- filterByRange(BEBres, genelocs, mygene, ggr_field="gene_name")
-     kk@tbl
+   output$CD4Unstim = DT::renderDataTable({
+   refs = allrefs()
+   refs[["CD4Unstim"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
+   })
+   output$AlvMacphage = DT::renderDataTable({
+   refs = allrefs()
+   refs[["AlvMacphage"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
+   })
+   output$PaxRNA = DT::renderDataTable({
+   refs = allrefs()
+   refs[["PaxRNA"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })
   output$alltabs = renderUI({
    tabsetPanel(
-    tabPanel("BAL", helpText("A"), verbatimTextOutput("BALstuff")),
-    tabPanel("BronchEpiBrush", verbatimTextOutput("BEBstuff")),
-    tabPanel("CD4stim", verbatimTextOutput("CD4stim")),
-    tabPanel("CD4Unstim", verbatimTextOutput("CD4Unstim")),
-    tabPanel("AlvMacphage", verbatimTextOutput("AlvMacphage")),
-    tabPanel("PaxRNA", verbatimTextOutput("PaxRNA"))
+    tabPanel("BAL", helpText("A"), DT::dataTableOutput("BALstuff")),
+    tabPanel("BronchEpiBrush", DT::dataTableOutput("BEBstuff")),
+    tabPanel("CD4stim", DT::dataTableOutput("CD4stim")),
+    tabPanel("CD4Unstim", DT::dataTableOutput("CD4Unstim")),
+    tabPanel("AlvMacphage", DT::dataTableOutput("AlvMacphage")),
+    tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA"))
     )
    })
  }
