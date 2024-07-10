@@ -4,7 +4,7 @@
 \alias{tinyapp}
 \title{demo app}
 \usage{
-tinyapp(con, genelocs)
+tinyapp(con, genelocs = ensembldb::genes(EnsDb.Hsapiens.v75))
 }
 \arguments{
 \item{con}{a DBI connection}
