@@ -1,6 +1,6 @@
-
 #' demo app 2
 #' @import shiny
+#' @import DT
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
 #' @note Very specialized, just has a few genes, uses specific
@@ -49,11 +49,13 @@ tinyapp2 = function(con, genelocs) {
    allfilt
    })
   dorounds = function(mydf) {
-   mydf$P = round(mydf$P, 3)
+   mydf$P = formatC(mydf$P, format = "e", digits= 3)
    mydf$SE = round(mydf$SE, 3)
    mydf$MAF = round(mydf$MAF, 3)
    mydf$BETA = round(mydf$BETA, 3)
-   mydf |> dplyr::select(-score, -seqnames)
+   mydf$FDR= round(mydf$FDR, 3)
+   mydf$statistic= round(mydf$statistic, 3)
+   mydf |> dplyr::select(-score, -seqnames, -SNP)
    }
   output$BALstuff = DT::renderDataTable({
    refs = allrefs()
@@ -92,4 +94,5 @@ tinyapp2 = function(con, genelocs) {
  }
  
  runApp(list(ui=ui, server=server))
+ DBI::dbDisconnect(con)
 }
