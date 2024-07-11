@@ -21,7 +21,6 @@ ABRIGresource = function(con, tissue, space="hg19", pfiles) {
 
 
 #' filter a GGI (ABRIGresource) instance by range
-#' @import EnsDb.Hsapiens.v75
 #' @param res ABRIGresource instance
 #' @param ggr GenomicRanges instance
 #' @param tag character(1) value in `ggr_field` used for filtering, e.g., a gene
@@ -30,7 +29,7 @@ ABRIGresource = function(con, tissue, space="hg19", pfiles) {
 #' @examples
 #' con = DBI::dbConnect(duckdb::duckdb())
 #' ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
-#' gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
+#' utils::data("gloc_hg19", package = "GGIpack")
 #' kk <- filterByRange(ll, gloc_hg19, "DSP", ggr_field="gene_name")
 #' print(kk)
 #' DBI::dbDisconnect(con)
