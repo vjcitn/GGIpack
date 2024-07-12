@@ -17,7 +17,7 @@ tinyapp2 = function(con, genelocs) {
   sidebarLayout(
    sidebarPanel(
     helpText("GGI demo"),
-    selectInput("gene", "gene", geneNames)
+    selectizeInput("gene", "gene", geneNames)
     ), 
    mainPanel(
     #verbatimTextOutput("stuff")
@@ -27,6 +27,8 @@ tinyapp2 = function(con, genelocs) {
  )   # also need tabs, about etc.
  
  server = function(input, output) {
+  updateSelectizeInput(session, "gene", choices =sort(geneNames),server = TRUE)
+   
   output$stuff = renderPrint({
    mygene = input$gene
    mytiss = input$tiss
