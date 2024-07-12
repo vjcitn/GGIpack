@@ -19,7 +19,7 @@ Very specialized, just has a few genes, uses specific
 field from genelocs argument.
 }
 \examples{
-gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
+utils::data("gloc_hg19", package = "GGIpack")
 con = DBI::dbConnect(duckdb::duckdb())
 tinyapp2(con, gloc_hg19)
 }

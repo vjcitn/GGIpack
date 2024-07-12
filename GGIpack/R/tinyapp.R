@@ -1,22 +1,23 @@
 #' demo app 2
-#' @import shiny
+#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
 #' @import DT
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
 #' @note Very specialized, just has a few genes, uses specific
 #' field from genelocs argument.
 #' @examples
-#' gloc_hg19 = ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
+#' utils::data("gloc_hg19", package = "GGIpack")
 #' con = DBI::dbConnect(duckdb::duckdb())
 #' tinyapp2(con, gloc_hg19)
 #' @export
 tinyapp2 = function(con, genelocs) {
  pfiles <<- ABRIGparquet_paths()
+ utils::data("geneNames", package = "GGIpack")
  ui = fluidPage(
   sidebarLayout(
    sidebarPanel(
     helpText("GGI demo"),
-    selectInput("gene", "gene", c("ORMDL3", "DSP", "AGL", "DBT", "SASS6"))
+    selectInput("gene", "gene", geneNames)
     ), 
    mainPanel(
     #verbatimTextOutput("stuff")

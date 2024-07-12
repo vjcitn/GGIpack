@@ -1,1 +1,1 @@
-utils::globalVariables("gloc_hg19")
+utils::globalVariables(c("gloc_hg19", "geneNames"))
