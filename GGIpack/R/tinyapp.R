@@ -6,9 +6,11 @@
 #' @note Very specialized, just has a few genes, uses specific
 #' field from genelocs argument.
 #' @examples
+#' if (interactive()){
 #' utils::data("gloc_hg19", package = "GGIpack")
 #' con = DBI::dbConnect(duckdb::duckdb())
 #' tinyapp2(con, gloc_hg19)
+#' }
 #' @export
 tinyapp2 = function(con, genelocs) {
  pfiles <<- ABRIGparquet_paths()
@@ -26,7 +28,7 @@ tinyapp2 = function(con, genelocs) {
   )
  )   # also need tabs, about etc.
  
- server = function(input, output) {
+ server = function(input, output, session) {
   updateSelectizeInput(session, "gene", choices =sort(geneNames),server = TRUE)
    
   output$stuff = renderPrint({

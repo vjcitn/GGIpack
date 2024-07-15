@@ -19,7 +19,9 @@ Very specialized, just has a few genes, uses specific
 field from genelocs argument.
 }
 \examples{
+if (interactive()){
 utils::data("gloc_hg19", package = "GGIpack")
 con = DBI::dbConnect(duckdb::duckdb())
 tinyapp2(con, gloc_hg19)
+}
 }
