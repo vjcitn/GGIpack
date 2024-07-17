@@ -44,6 +44,7 @@ tinyapp2 = function(con, genelocs) {
 #
   
   allrefs = reactive({
+    req(input$gene)
    ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
                   "AlvMacphage", "PaxRNA")
    mygene = input$gene
@@ -88,7 +89,7 @@ tinyapp2 = function(con, genelocs) {
    })
   output$alltabs = renderUI({
    tabsetPanel(
-    tabPanel("BAL", helpText("A"), DT::dataTableOutput("BALstuff")),
+    tabPanel("BAL",  DT::dataTableOutput("BALstuff")),
     tabPanel("BronchEpiBrush", DT::dataTableOutput("BEBstuff")),
     tabPanel("CD4stim", DT::dataTableOutput("CD4stim")),
     tabPanel("CD4Unstim", DT::dataTableOutput("CD4Unstim")),
