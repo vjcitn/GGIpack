@@ -20,6 +20,7 @@ test_that("filterByRange", {
   ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
   utils::data("gloc_hg19", package = "GGIpack")
   BAL_DSP <- filterByRange(ll, gloc_hg19, "DSP", ggr_field="gene_name")
+  BAL_DSP <- BAL_DSP@tbl |> as.data.frame()
   answerPath <- system.file("extdata", "BAL_DSP.rds", package = "GGIpack")
   answer <- readRDS(file= answerPath)
   expect_equal(BAL_DSP, answer)
@@ -34,4 +35,4 @@ test_that("ABRIGresource",
           })
 
 
-dbDisconnect(con, shutdown=TRUE)
+DBI::dbDisconnect(con, shutdown=TRUE)
