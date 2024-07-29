@@ -43,3 +43,20 @@ filterByRange = function(res, ggr, tag, radius=1e5, ggr_field="gene_name") {
   ans = methods::slot(res, "tbl") |> dplyr::filter(CHR == local(anac(GenomicRanges::seqnames(ok)[1])), BP >= local(IRanges::start(ok)-radius), BP<= local(IRanges::end(ok)+radius))
   new("ABRIGresource", space = methods::slot(res, "space"), tbl=ans)
 }
+
+#' Takes in a path to a data table and coherses the data into the proper format 
+#' @param path The complete path to the DN8 file.
+#' @examples
+#' path = system.file("extdata/Alveolar_Macrophages_IS.MICA:ILMN_3241692.CAU.meta", package="GGIpack")
+#' head(checkData(path = path))
+#' @return a data set that can be used to graph in JBrowseR.
+#' @export
+checkData = function(path){
+    df = utils::read.table(path, header = TRUE)
+    needCols = c("BP", "P", "CHR")
+    stopifnot(needCols %in% colnames(df))
+    data =dplyr::mutate(df, start = BP, end =BP)
+    return(data)
+  }
+}
+
