@@ -44,7 +44,7 @@ filterByRange = function(res, ggr, tag, radius=1e5, ggr_field="gene_name") {
   new("ABRIGresource", space = methods::slot(res, "space"), tbl=ans)
 }
 
-#' Takes in a path to a data table and coherses the data into the proper format 
+#' Takes in a path to a data table and coheres the data into the proper format 
 #' @param path The complete path to the DN8 file.
 #' @examples
 #' path = system.file("extdata/Alveolar_Macrophages_IS.MICA:ILMN_3241692.CAU.meta", package="GGIpack")
@@ -57,6 +57,5 @@ checkData = function(path){
     stopifnot(needCols %in% colnames(df))
     data =dplyr::mutate(df, start = BP, end =BP)
     return(data)
-  }
 }
 
