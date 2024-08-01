@@ -15,7 +15,7 @@ ABRIGresource = function(con, tissue, space="hg19", pfiles) {
    ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
                   "AlvMacphage", "PaxRNA")
    stopifnot(tissue %in% ttypes)
-   ans = dplyr::tbl(con, pfiles[tissue]) |> mutate(score=FDR, seqnames=CHR)
+   ans = dplyr::tbl(con, pfiles[tissue]) |> dplyr::mutate(score=FDR, seqnames=CHR)
    new("ABRIGresource", space=space, tbl=ans)
 }
 
@@ -47,7 +47,7 @@ filterByRange = function(res, ggr, tag, radius=1e5, ggr_field="gene_name") {
 #' Takes in a path to a data table and coheres the data into the proper format 
 #' @param path The complete path to the DN8 file.
 #' @examples
-#' path = system.file("extdata/Alveolar_Macrophages_IS.MICA:ILMN_3241692.CAU.meta", package="GGIpack")
+#' path = system.file("extdata/Alveolar_Macrophages_IS.MICA_ILMN_3241692.CAU.meta", package="GGIpack")
 #' head(checkData(path = path))
 #' @return a data set that can be used to graph in JBrowseR.
 #' @export

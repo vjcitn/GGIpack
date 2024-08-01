@@ -2,6 +2,7 @@
 
 export(ABRIGparquet_paths)
 export(ABRIGresource)
+export(checkData)
 export(filterByRange)
 export(tinyapp2)
 exportClasses(ABRIGresource)

@@ -2,13 +2,20 @@
 % Please edit documentation in R/ops.R
 \name{checkData}
 \alias{checkData}
-\title{Takes in a path to a data table and coherses the data into the proper format}
+\title{Takes in a path to a data table and coheres the data into the proper format}
 \usage{
 checkData(path)
 }
 \arguments{
 \item{path}{The complete path to the DN8 file.}
 }
+\value{
+a data set that can be used to graph in JBrowseR.
+}
 \description{
-Takes in a path to a data table and coherses the data into the proper format
+Takes in a path to a data table and coheres the data into the proper format
+}
+\examples{
+path = system.file("extdata/Alveolar_Macrophages_IS.MICA:ILMN_3241692.CAU.meta", package="GGIpack")
+head(checkData(path = path))
 }
