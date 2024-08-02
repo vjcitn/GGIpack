@@ -3,7 +3,7 @@ library(testthat)
 con = DBI::dbConnect(duckdb::duckdb())
 
 test_that("ABRIGparquet_paths", {
-  test = ABRIGparquet_paths()
+  test = ABRIGparquet_paths() 
   answer = c("/udd/remcr/abrig/ca_ba.parquet", "/udd/remcr/abrig/ca_brep.parquet",
              "/udd/remcr/abrig/cc_s.parquet", "/udd/remcr/abrig/cc_unstim.parquet",
              "/udd/remcr/abrig/ch_am.parquet", "/udd/remcr/abrig/comb.parquet")
@@ -24,6 +24,7 @@ test_that("filterByRange", {
   answerPath <- system.file("extdata", "BAL_DSP.rds", package = "GGIpack")
   answer <- readRDS(file= answerPath)
   expect_equal(BAL_DSP, answer)
+ #expect_match(BAL_DSP, answer)
 })
 
 
