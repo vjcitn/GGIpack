@@ -21,6 +21,7 @@ ABRIGresource = function(con, tissue, space="hg19", pfiles) {
 
 
 #' filter a GGI (ABRIGresource) instance by range
+#' @rawNamespace import(GenomicRanges, except=c(intersect, union, setdiff))
 #' @param res ABRIGresource instance
 #' @param ggr GenomicRanges instance
 #' @param tag character(1) value in `ggr_field` used for filtering, e.g., a gene

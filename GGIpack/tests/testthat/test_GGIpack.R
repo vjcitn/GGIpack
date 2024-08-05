@@ -17,7 +17,7 @@ test_that("ABRIGparquet_paths", {
  
 
 test_that("filterByRange", {
-  ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
+ ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
   utils::data("gloc_hg19", package = "GGIpack")
   BAL_DSP <- filterByRange(ll, gloc_hg19, "DSP", ggr_field="gene_name")
   BAL_DSP <- BAL_DSP@tbl |> as.data.frame()

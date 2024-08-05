@@ -25,7 +25,7 @@ server <- function(input, output, session) {
     name = c('feature1', 'feature2')
   )
   
-  df_track <- track_data_frame(df, "foo", assembly)
+  df_track <- JBrowseR::track_data_frame(df, "foo", assembly)
   
   # set up the final tracks object to be used
   tracks <- tracks(
@@ -40,8 +40,8 @@ server <- function(input, output, session) {
   )
   
   
-  output$widgetOutput <- renderJBrowseR(
-    JBrowseR("View",
+  output$widgetOutput <- JBrowseR::renderJBrowseR(
+    JBrowseR::JBrowseR("View",
              assembly = assembly,
              tracks = tracks,
              location = "2:456",
