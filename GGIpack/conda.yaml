@@ -4,6 +4,8 @@ channels:
     - bioconda
 dependencies:
     # - r-base==4.0.3
+    - r-jbrowser ## == 0.10.2
+    - r-duckdb # 1.0.0_1 
     - r-devtools #==2.4.5
     - r-dplyr #==1.1.0
     - r-markdown #==1.5
