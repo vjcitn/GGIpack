@@ -23,7 +23,7 @@ tinyapp2 = function(con, genelocs) {
     selectizeInput("gene", "gene", geneNames)
     ), 
    mainPanel(
-    #verbatimTextOutput("stuff")
+     tabPanel("about", "About", verbatimTextOutput("stuff")),
     uiOutput("alltabs")
     )
   )
@@ -98,6 +98,8 @@ tinyapp2 = function(con, genelocs) {
     tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA"))
     )
    })
+  output$stuff = renderPrint( { sprintf("GGIpack tinyapp2 version %s", 
+                                        packageVersion("GGIpack")) } )
  }
  
  runApp(list(ui=ui, server=server))
