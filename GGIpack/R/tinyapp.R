@@ -23,7 +23,6 @@ tinyapp2 = function(con, genelocs) {
     selectizeInput("gene", "gene", geneNames)
     ), 
    mainPanel(
-     tabPanel("about", "About", verbatimTextOutput("stuff")),
     uiOutput("alltabs")
     )
   )
@@ -55,6 +54,9 @@ tinyapp2 = function(con, genelocs) {
    names(allfilt) = ttypes
    allfilt
    })
+  
+  output$stuff = renderPrint( { sprintf("GGIpack tinyapp2 version %s", 
+                                        packageVersion("GGIpack")) } )
   dorounds = function(mydf) {
    mydf$P = formatC(mydf$P, format = "e", digits= 3)
    mydf$SE = round(mydf$SE, 3)
@@ -95,11 +97,11 @@ tinyapp2 = function(con, genelocs) {
     tabPanel("CD4stim", DT::dataTableOutput("CD4stim")),
     tabPanel("CD4Unstim", DT::dataTableOutput("CD4Unstim")),
     tabPanel("AlvMacphage", DT::dataTableOutput("AlvMacphage")),
-    tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA"))
+    tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA")),
+    tabPanel("about", "About", verbatimTextOutput("stuff")),
     )
    })
-  output$stuff = renderPrint( { sprintf("GGIpack tinyapp2 version %s", 
-                                        packageVersion("GGIpack")) } )
+  
  }
  
  runApp(list(ui=ui, server=server))
