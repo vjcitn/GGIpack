@@ -23,7 +23,35 @@ tinyapp2 = function(con, genelocs) {
     selectizeInput("gene", "gene", geneNames)
     ), 
    mainPanel(
-    uiOutput("alltabs")
+    uiOutput("alltabs"),
+    tabPanel("about",
+             br(),
+             p(#sprintf(
+               "GGIpack tinyapp2 version %s.  This app uses parquet files made 
+                 from the abrig  data release on 05/15/2023. This new data release merges the 
+                 population data for each of the cell types together thus there is no more choice 
+                 for population since there is no way to separate the data anymore. The original
+                 data can be found in the following  path on the Nantucket server."#,
+               #packageVersion("GGIpack") ) 
+             ),
+             br(),
+             p("/proj/regeps/regep00/studies/ABRIG/analyses/reahs/cis_eqtl_matrixEqtl.Release.15.05.23/"),
+             br(),
+             p("The parquet files were made using the package duckdb . In short these files
+                   were made by merging all the 23 chromosome files for each of the cell types 
+                   into one file. The table below shows the name of the cell type, the name 
+                   that it is called in the app, and the name of the actual file."),
+             br(),
+             #dataTableOutput("parquet"),
+             p("The files can be found in the Nantucket server under."),
+             br(),
+             p("/udd/remcr/abrig/"),
+             br(),
+             p("The code that was used to create these files can be found in the following 
+                   Changit Repository."),
+             br(),
+             p("https://changit.bwh.harvard.edu/remcr/abrigResources")
+    )# about tabPanel
     )
   )
  )   # also need tabs, about etc.
@@ -55,8 +83,9 @@ tinyapp2 = function(con, genelocs) {
    allfilt
    })
   
-  output$stuff = renderPrint( { sprintf("GGIpack tinyapp2 version %s", 
-                                        packageVersion("GGIpack")) } )
+#output$stuff = renderPrint ({
+   
+           
   dorounds = function(mydf) {
    mydf$P = formatC(mydf$P, format = "e", digits= 3)
    mydf$SE = round(mydf$SE, 3)
@@ -98,7 +127,7 @@ tinyapp2 = function(con, genelocs) {
     tabPanel("CD4Unstim", DT::dataTableOutput("CD4Unstim")),
     tabPanel("AlvMacphage", DT::dataTableOutput("AlvMacphage")),
     tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA")),
-    tabPanel("about", "About", verbatimTextOutput("stuff")),
+    #tabPanel("about", "About", verbatimTextOutput("stuff")),
     )
    })
   
