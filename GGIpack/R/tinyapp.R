@@ -57,7 +57,8 @@ tinyapp2 = function(con, genelocs) {
    })#allrefs
   
 
-  output$aboutPage= renderPrint({br(),
+  output$aboutPage= renderPrint({
+    br(),
           p(#sprintf(
             "GGIpack tinyapp2 version %s.  This app uses parquet files made 
                  from the abrig  data release on 05/15/2023. This new data release merges the 
@@ -128,7 +129,7 @@ tinyapp2 = function(con, genelocs) {
     tabPanel("CD4Unstim", DT::dataTableOutput("CD4Unstim")),
     tabPanel("AlvMacphage", DT::dataTableOutput("AlvMacphage")),
     tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA")),
-    tabPanel("about", "About", verbatimTextOutput("stuff"))
+    tabPanel("about", "About", verbatimTextOutput("aboutPage"))
     ) #tabsetPanel
    }) #renderUI
   
