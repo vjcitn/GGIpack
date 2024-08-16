@@ -143,3 +143,4 @@ tinyapp2 = function(con, genelocs) {
  runApp(list(ui=ui, server=server))
  DBI::dbDisconnect(con)
 } #end of tinyapp2
+
