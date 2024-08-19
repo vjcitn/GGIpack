@@ -16,6 +16,8 @@
 tinyapp2 = function(con, genelocs) {
  pfiles <<- ABRIGparquet_paths()
  utils::data("geneNames", package = "GGIpack")
+ patquetTableLoc <-system.file("extdata","parquetDataTable.csv", package = "GGIpack" )
+ patquetTable <- utils::read.csv(patquetTableLoc)
  ui = fluidPage(
   sidebarLayout(
    sidebarPanel(
@@ -110,13 +112,13 @@ tinyapp2 = function(con, genelocs) {
     tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA")),
     tabPanel("about", helpText(h3("GGIpack Overview")),
              br(),
-             p(#sprintf(
+             p(sprintf(
                "GGIpack tinyapp2 version %s.  This app uses parquet files made 
                  from the abrig  data release on 05/15/2023. This new data release merges the 
                  population data for each of the cell types together thus there is no more choice 
                  for population since there is no way to separate the data anymore. The original
-                 data can be found in the following  path on the Nantucket server."#,
-               #packageVersion("GGIpack") ) 
+                 data can be found in the following  path on the Nantucket server.",
+               packageVersion("GGIpack") ) 
              ),
              br(),
              p("/proj/regeps/regep00/studies/ABRIG/analyses/reahs/cis_eqtl_matrixEqtl.Release.15.05.23/"),
@@ -126,7 +128,7 @@ tinyapp2 = function(con, genelocs) {
                    into one file. The table below shows the name of the cell type, the name 
                    that it is called in the app, and the name of the actual file."),
              br(),
-             #dataTableOutput("parquet"),
+             dataTableOutput("parquet"),
              p("The files can be found in the Nantucket server under."),
              br(),
              p("/udd/remcr/abrig/"),
