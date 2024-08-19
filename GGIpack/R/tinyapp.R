@@ -101,6 +101,9 @@ tinyapp2 = function(con, genelocs) {
    refs[["PaxRNA"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    }) #paxRNA
    
+   output$parquet<- renderDataTable({
+     data.frame(patquetTable)
+   })#parquet
    
   output$alltabs = renderUI({
    tabsetPanel(
@@ -123,10 +126,10 @@ tinyapp2 = function(con, genelocs) {
              br(),
              p("/proj/regeps/regep00/studies/ABRIG/analyses/reahs/cis_eqtl_matrixEqtl.Release.15.05.23/"),
              br(),
-             p("The parquet files were made using the package duckdb . In short these files
-                   were made by merging all the 23 chromosome files for each of the cell types 
-                   into one file. The table below shows the name of the cell type, the name 
-                   that it is called in the app, and the name of the actual file."),
+             p(" The parquet files were made using the arrow package an R package.  
+               Then the parquet files were processed/querried using the  duckdb R package.
+               In short these fileswere made by merging all the 23 chromosome files for each of the cell types into one file.
+               The table below shows the name of the cell type, the name that it is called in the app, and the name of the actual file."),
              br(),
              dataTableOutput("parquet"),
              p("The files can be found in the Nantucket server under."),
