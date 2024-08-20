@@ -20,3 +20,14 @@ setMethod("show", "ABRIGresource", function(object) {
  cat("CDNM ggiResource\n")
  print(slot(object, "tbl"))
 })
+
+
+#' GTEx resource is tallored to the  wholeblpl05.parquet and lungpl05.parquet  resources.
+#' @export
+setClass("GTExresource", contains="ggiResource")
+
+GTExresource = function (con, space = "hg19", pfile)
+{
+  ans = dplyr::mutate(tbl(con, pfile), score = pvalue, seqnames = chromosome)
+  new("GTExresource", space = space, tbl = ans)
+}

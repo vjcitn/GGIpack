@@ -18,6 +18,15 @@ tinyapp2 = function(con, genelocs) {
  utils::data("geneNames", package = "GGIpack")
  patquetTableLoc <-system.file("extdata","parquetDataTable.csv", package = "GGIpack" )
  patquetTable <- utils::read.csv(patquetTableLoc)
+ genomeVersion <- "hg19"
+ 
+ #-----------------------------------------------------------------------------------
+ if(!dir.exists("tracks"))
+   dir.create("tracks")
+ shiny::addResourcePath("tracks", "tracks")
+ #-------------------------------------------------------------------------------------
+ 
+ 
  ui = fluidPage(
   sidebarLayout(
    sidebarPanel(
@@ -25,6 +34,9 @@ tinyapp2 = function(con, genelocs) {
     selectizeInput("gene", "gene", geneNames)
     ), 
    mainPanel(
+     tabPanel(igvShiny::igvShinyOutput("igvShiny_0"),
+              #shinyFeedback::useShinyFeedback()
+     ),#tabPanel
     uiOutput("alltabs")
     ) #mainPanel
   ) #sidebarLayout
@@ -45,6 +57,11 @@ tinyapp2 = function(con, genelocs) {
 # highly repetitious, use reactive better or build a list, possibly
 # parallelized
 #
+  
+  #####add graphing input here 
+  
+  
+  
   
   allrefs = reactive({
     req(input$gene)
@@ -104,6 +121,26 @@ tinyapp2 = function(con, genelocs) {
    output$parquet<- renderDataTable({
      data.frame(patquetTable)
    })#parquet
+   
+   ##igvshiny
+   ########################################  
+   
+   output$igvShiny_0 = igvShiny::renderIgvShiny({
+     genomeOptions <- igvShiny::parseAndValidateGenomeSpec(genomeName = genomeVersion, initialLocus = "all")
+     igvShiny(genomeOptions)
+   })#igvShiny_0
+   
+   dataToGraph = c("BALstuff", "BEBstuff","CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
+   
+   
+   names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
+  
+   output$eqtlsToGraph = renderUI({
+     for(i in 1:length(dataToGraph)){
+       gwasTrack = makeGWASTrack( name=names(dataToGraph)[i], dat = as.data.frame(dataToGraph[[i]]))
+       display(gwasTrack, session, id = "igvShiny_0")
+     }
+   })
    
   output$alltabs = renderUI({
    tabsetPanel(

@@ -60,3 +60,26 @@ checkData = function(path){
     return(data)
 }
 
+
+#' make GWASTrack for shiny app. 
+#' @importFrom igvShiny GWASTrack
+#' @param dat the data table exported from the find_data 
+#' @param name the name of the track in the shiny app
+#' @return a gwasTrack read to graph by igvshiny
+#' @note
+#' It is required that the column  header need to be the following:
+#' c("SNP", "CHR", "BP", "A1", "A2", "gene", "geneId", "statistic", 
+#'  "P", "FDR", "BETA", "SE", "MAF")
+#'  It is  advised if the desired data does not have these column headers that the column headers need to be changed to the above. 
+#' @examples
+#' dat = find_data()
+#' makeGWASTrack(dat = dat)
+#' @export
+makeGWASTrack = function( name="NA", dat) {
+  ndat = names(dat)
+  pindex = which(ndat == "P")
+  bpindex = which(ndat == "BP")
+  chrindex = which(ndat == "CHR")
+  igvShiny::GWASTrack(trackName = name, data = dat, chrom.col=chrindex, pos.col = bpindex, 
+                      pval.col = pindex)
+}
