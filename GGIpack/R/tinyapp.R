@@ -1,6 +1,8 @@
 #' demo app 2
 #' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
 #' @rawNamespace import(GenomicRanges, except=c(intersect, union, setdiff))
+#' @import shiny
+#' @import igvShiny
 #' @import DT
 #' @param con a DBI connection
 #' @param genelocs a GRanges instance with gene addresses
@@ -34,9 +36,6 @@ tinyapp2 = function(con, genelocs) {
     selectizeInput("gene", "gene", geneNames)
     ), 
    mainPanel(
-     tabPanel(igvShiny::igvShinyOutput("igvShiny_0"),
-              #shinyFeedback::useShinyFeedback()
-     ),#tabPanel
     uiOutput("alltabs")
     ) #mainPanel
   ) #sidebarLayout
@@ -57,11 +56,7 @@ tinyapp2 = function(con, genelocs) {
 # highly repetitious, use reactive better or build a list, possibly
 # parallelized
 #
-  
-  #####add graphing input here 
-  
-  
-  
+
   
   allrefs = reactive({
     req(input$gene)
@@ -135,15 +130,18 @@ tinyapp2 = function(con, genelocs) {
    
    names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
   
-   output$eqtlsToGraph = renderUI({
+   observeEvent(input$gene, {
      for(i in 1:length(dataToGraph)){
        gwasTrack = makeGWASTrack( name=names(dataToGraph)[i], dat = as.data.frame(dataToGraph[[i]]))
        display(gwasTrack, session, id = "igvShiny_0")
-     }
-   })
+     } #for loop
+   }) #observeEvent
    
   output$alltabs = renderUI({
    tabsetPanel(
+     tabPanel(igvShiny::igvShinyOutput("igvShiny_0"),
+              #shinyFeedback::useShinyFeedback()
+              ),
     tabPanel("BAL",  DT::dataTableOutput("BALstuff")),
     tabPanel("BronchEpiBrush", DT::dataTableOutput("BEBstuff")),
     tabPanel("CD4stim", DT::dataTableOutput("CD4stim")),
