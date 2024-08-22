@@ -1,7 +1,6 @@
 #' demo app 2
 #' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
 #' @rawNamespace import(GenomicRanges, except=c(intersect, union, setdiff))
-#' @import shiny
 #' @import igvShiny
 #' @import DT
 #' @param con a DBI connection
@@ -33,7 +32,8 @@ tinyapp2 = function(con, genelocs) {
   sidebarLayout(
    sidebarPanel(
     helpText("GGI demo"),
-    selectizeInput("gene", "gene", geneNames)
+    selectizeInput("gene", "gene", geneNames),
+    actionButton("zoomButton", label = "Zoom")
     ), 
    mainPanel(
     uiOutput("alltabs")
@@ -135,7 +135,15 @@ tinyapp2 = function(con, genelocs) {
        gwasTrack = makeGWASTrack( name=names(dataToGraph)[i], dat = as.data.frame(dataToGraph[[i]]))
        display(gwasTrack, session, id = "igvShiny_0")
      } #for loop
+    
    }) #observeEvent
+   
+   observeEvent(input$zoomButton,{
+     
+     tableDn8like = as.data.frame(dataToGraph[[1]])
+     genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
+     showGenomicRegion(session, "igvShiny_0", genomicRegion)
+   })
    
   output$alltabs = renderUI({
    tabsetPanel(
