@@ -32,8 +32,8 @@ tinyapp2 = function(con, genelocs) {
   sidebarLayout(
    sidebarPanel(
     helpText("GGI demo"),
-    selectizeInput("gene", "gene", geneNames),
-    actionButton("zoomButton", label = "Zoom")
+    selectizeInput("gene", "gene", geneNames) #,
+    #actionButton("zoomButton", label = "Zoom")
     ), 
    mainPanel(
     uiOutput("alltabs")
@@ -83,32 +83,32 @@ tinyapp2 = function(con, genelocs) {
    }#dorounds
   
   
-  output$BALstuff = DT::renderDataTable({
+  output$BALstuff = DT::renderDT({
    refs = allrefs()
    refs[["BAL"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#BALstuff
   
-  output$BEBstuff = DT::renderDataTable({
+  output$BEBstuff = DT::renderDT({
    refs = allrefs()
    refs[["BroncEpiBrush"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#BEBstuff
   
-  output$CD4stim = DT::renderDataTable({
+  output$CD4stim = DT::renderDT({
    refs = allrefs()
    refs[["CD4Stim"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    }) #CD4Stim
   
-   output$CD4Unstim = DT::renderDataTable({
+   output$CD4Unstim = DT::renderDT({
    refs = allrefs()
    refs[["CD4Unstim"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#CD4Unstim
    
-   output$AlvMacphage = DT::renderDataTable({
+   output$AlvMacphage = DT::renderDT({
    refs = allrefs()
    refs[["AlvMacphage"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#AlvMacphage
    
-   output$PaxRNA = DT::renderDataTable({
+   output$PaxRNA = DT::renderDT({
    refs = allrefs()
    refs[["PaxRNA"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    }) #paxRNA
