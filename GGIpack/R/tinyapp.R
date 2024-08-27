@@ -141,9 +141,9 @@ tinyapp2 = function(con, genelocs) {
        gwasTrack = makeGWASTrack( name=names(dataToGraph)[i], dat = as.data.frame(dataToGraph[[i]]))
        display(gwasTrack, session, id = "igvShiny_0")
      } #for loop
-     #tableDn8like = allrefs[[1]]@tbl |> as.data.frame() 
-     #genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
-     #showGenomicRegion(session, "igvShiny_0", genomicRegion)
+     tableDn8like = allrefs[[1]]@tbl |> as.data.frame() 
+     genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
+     showGenomicRegion(session, "igvShiny_0", genomicRegion)
    }) #observeEvent
    
   # observeEvent(input$zoomButton,{
