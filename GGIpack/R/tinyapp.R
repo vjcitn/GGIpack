@@ -16,6 +16,7 @@
 #' @export
 tinyapp2 = function(con, genelocs) {
  pfiles <<- ABRIGparquet_paths()
+ bpPadding = 30000
  utils::data("geneNames", package = "GGIpack")
  patquetTableLoc <-system.file("extdata","parquetDataTable.csv", package = "GGIpack" )
  patquetTable <- utils::read.csv(patquetTableLoc)
@@ -39,7 +40,8 @@ tinyapp2 = function(con, genelocs) {
     uiOutput("alltabs")
     ) #mainPanel
   ) #sidebarLayout
- )   # also need tabs, about etc.
+ )#fluidPage
+ 
  
  server = function(input, output, session) {
   updateSelectizeInput(session, "gene", choices =sort(geneNames),server = TRUE)
@@ -50,13 +52,11 @@ tinyapp2 = function(con, genelocs) {
    newres = ABRIGresource(con, input$tiss, pfiles = pfiles)
    kk <- filterByRange(newres, genelocs, mygene, ggr_field="gene_name")
    kk@tbl
-  })
+  }) #outputStuff
 
-  #
-# highly repetitious, use reactive better or build a list, possibly
-# parallelized
-#
-
+#####################################################################
+## functions for the datatables
+####################################################################
   
   allrefs = reactive({
     req(input$gene)
@@ -113,49 +113,62 @@ tinyapp2 = function(con, genelocs) {
    refs[["PaxRNA"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    }) #paxRNA
    
-   output$parquet<- renderDataTable({
+   output$parquet<- DT::renderDT({
      data.frame(patquetTable)
    })#parquet
+   ##################################################################################################
    
+   
+   
+   
+   ################################################################################################################
    ##igvshiny
-   ########################################  
+   ############################################################################################################### 
    
    output$igvShiny_0 = igvShiny::renderIgvShiny({
      genomeOptions <- igvShiny::parseAndValidateGenomeSpec(genomeName = genomeVersion, initialLocus = "all")
      igvShiny(genomeOptions)
    })#igvShiny_0
    
+  
    dataToGraph = c("BALstuff", "BEBstuff","CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
    
    
    names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
-  
+   
    observeEvent(input$gene, {
      for(i in 1:length(dataToGraph)){
        gwasTrack = makeGWASTrack( name=names(dataToGraph)[i], dat = as.data.frame(dataToGraph[[i]]))
        display(gwasTrack, session, id = "igvShiny_0")
      } #for loop
-    
+     #tableDn8like = allrefs[[1]]@tbl |> as.data.frame() 
+     #genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
+     #showGenomicRegion(session, "igvShiny_0", genomicRegion)
    }) #observeEvent
    
-   observeEvent(input$zoomButton,{
+  # observeEvent(input$zoomButton,{
      
-     tableDn8like = as.data.frame(dataToGraph[[1]])
-     genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
-     showGenomicRegion(session, "igvShiny_0", genomicRegion)
-   })
+    # tableDn8like = as.data.frame(dataToGraph[[1]])
+    # genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
+    # showGenomicRegion(session, "igvShiny_0", genomicRegion)
+   #})
    
-  output$alltabs = renderUI({
+   
+   
+#####################################################################################################################   
+#output for main panel
+#################################################################################################################
+    output$alltabs = renderUI({
    tabsetPanel(
      tabPanel(igvShiny::igvShinyOutput("igvShiny_0"),
               #shinyFeedback::useShinyFeedback()
               ),
-    tabPanel("BAL",  DT::dataTableOutput("BALstuff")),
-    tabPanel("BronchEpiBrush", DT::dataTableOutput("BEBstuff")),
-    tabPanel("CD4stim", DT::dataTableOutput("CD4stim")),
-    tabPanel("CD4Unstim", DT::dataTableOutput("CD4Unstim")),
-    tabPanel("AlvMacphage", DT::dataTableOutput("AlvMacphage")),
-    tabPanel("PaxRNA", DT::dataTableOutput("PaxRNA")),
+    tabPanel("BAL",  DT::renderDT("BALstuff")),
+    tabPanel("BronchEpiBrush", DT::renderDT("BEBstuff")),
+    tabPanel("CD4stim", DT::renderDT("CD4stim")),
+    tabPanel("CD4Unstim", DT::renderDT("CD4Unstim")),
+    tabPanel("AlvMacphage", DT::renderDT("AlvMacphage")),
+    tabPanel("PaxRNA", DT::renderDT("PaxRNA")),
     tabPanel("about", helpText(h3("GGIpack Overview")),
              br(),
              p(sprintf(
@@ -174,7 +187,7 @@ tinyapp2 = function(con, genelocs) {
                In short these fileswere made by merging all the 23 chromosome files for each of the cell types into one file.
                The table below shows the name of the cell type, the name that it is called in the app, and the name of the actual file."),
              br(),
-             dataTableOutput("parquet"),
+             DT::DTOutput("parquet"),
              p("The files can be found in the Nantucket server under."),
              br(),
              p("/udd/remcr/abrig/"),
@@ -186,7 +199,8 @@ tinyapp2 = function(con, genelocs) {
        ) #tabPanel for about page
     ) #tabsetPanel
    }) #renderUI
-  
+  ##############################################################
+   
  }#end of server
  runApp(list(ui=ui, server=server))
  DBI::dbDisconnect(con)
