@@ -135,15 +135,20 @@ tinyapp2 = function(con, genelocs) {
    
    
    names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
-   
+  
    observeEvent(input$gene, {
-     for(i in 1:length(dataToGraph)){
-       gwasTrack = makeGWASTrack( name=names(dataToGraph)[i], dat = as.data.frame(dataToGraph[[i]]))
+     refs = allrefs()
+     print(names(refs))
+     print(refs[[1]]@tbl)
+     for(i in 1:length(refs)){
+        table = refs[[i]]@tbl |>  as.data.frame() 
+        print(table)
+       gwasTrack = makeGWASTrack( name=names(table)[i], dat = as.data.frame(dataToGraph))
        display(gwasTrack, session, id = "igvShiny_0")
      } #for loop
-     tableDn8like = allrefs[[1]]@tbl |> as.data.frame() 
-     genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
-     showGenomicRegion(session, "igvShiny_0", genomicRegion)
+     #tableDn8like =  allfilt[[1]]@tbl |> as.data.frame() 
+     #genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
+     #showGenomicRegion(session, "igvShiny_0", genomicRegion)
    }) #observeEvent
    
   # observeEvent(input$zoomButton,{
