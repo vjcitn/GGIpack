@@ -131,25 +131,25 @@ tinyapp2 = function(con, genelocs) {
    })#igvShiny_0
    
   
-   dataToGraph = c("BALstuff", "BEBstuff","CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
+   #dataToGraph = c("BALstuff", "BEBstuff","CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
    
    
-   names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
+   #names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
   
-   observeEvent(input$gene, {
-     refs = allrefs()
-     print(names(refs))
-     print(refs[[1]]@tbl)
-     for(i in 1:length(refs)){
-        table = refs[[i]]@tbl |>  as.data.frame() 
-        print(table)
-       gwasTrack = makeGWASTrack( name=names(table)[i], dat = as.data.frame(dataToGraph))
-       display(gwasTrack, session, id = "igvShiny_0")
-     } #for loop
+  # observeEvent(input$gene, {
+   #  refs = allrefs()
+   #  print(names(refs))
+   #  print(refs[[1]]@tbl)
+     #for(i in 1:length(refs)){
+       # table = refs[[i]]@tbl |>  as.data.frame() 
+       # print(table)
+       #gwasTrack = makeGWASTrack( name=names(table)[i], dat = as.data.frame(dataToGraph))
+       #display(gwasTrack, session, id = "igvShiny_0")
+    # } #for loop
      #tableDn8like =  allfilt[[1]]@tbl |> as.data.frame() 
      #genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
      #showGenomicRegion(session, "igvShiny_0", genomicRegion)
-   }) #observeEvent
+   #}) #observeEvent
    
   # observeEvent(input$zoomButton,{
      
