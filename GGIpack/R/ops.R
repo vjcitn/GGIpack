@@ -83,3 +83,45 @@ makeGWASTrack = function( name="NA", dat) {
   igvShiny::GWASTrack(trackName = name, data = dat, chrom.col=chrindex, pos.col = bpindex, 
                       pval.col = pindex)
 }
+
+#' this makes a data.frame
+#' @param con 
+#' @param tissue character(1)
+#' @param gene character(1)
+#' @return a data frame filters by tissue and gene.
+#' @examples
+#' con = DBI::dbConnect(duckdb::duckdb())
+#' nn = make_data_frame_from_tissue_and_gene(con, "BAL", "DSP")
+#' DBI::dbDisconnect(con)
+#' @export
+make_data_frame_from_tissue_and_gene = function(con, tissue, gene) {
+  #
+  # add code to validate tissue and gene
+  ll = ABRIGresource( con, tissue , pfiles= ABRIGparquet_paths())
+  utils::data("gloc_hg19", package = "GGIpack")
+  kk <- filterByRange(ll, gloc_hg19, gene, ggr_field="gene_name")
+  tmp = as.data.frame(kk@tbl)
+  stopifnot(inherits(tmp, "data.frame"))
+  tmp
+}
+
+
+#' Takes in a metaABRIG data table and rounds the SE MAF BETA FDR and statistic to 3 digits. For P (pvalue) that variable is turned into  the scientific notation then rounded to 3 digits. 
+#' @import dplyr
+#' @param mydf  metaABRIG data table
+#' @return a metaABRIG data table with rounded values . 
+#'@examples
+#'con = DBI::dbConnect(duckdb::duckdb())
+#' nn = make_data_frame_from_tissue_and_gene(con, "BAL", "DSP")
+#' dorounds(mydf= nn )
+#' DBI::dbDisconnect(con)
+#' @export
+dorounds = function(mydf) {
+  mydf$P = formatC(mydf$P, format = "e", digits= 3)
+  mydf$SE = round(mydf$SE, 3)
+  mydf$MAF = round(mydf$MAF, 3)
+  mydf$BETA = round(mydf$BETA, 3)
+  mydf$FDR= round(mydf$FDR, 3)
+  mydf$statistic= round(mydf$statistic, 3)
+  mydf |> dplyr::select(-score, -seqnames, -SNP)
+}
