@@ -60,14 +60,8 @@ tinyapp2 = function(con, genelocs) {
   
   allrefs = reactive({
     req(input$gene)
-   ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
-                  "AlvMacphage", "PaxRNA")
-   mygene = input$gene
-   allres = lapply(ttypes, function(x) ABRIGresource(con, x, pfiles=pfiles))
-   allfilt = lapply(allres, function(x) filterByRange(x,
-         genelocs, mygene, ggr_field="gene_name"))
-   names(allfilt) = ttypes
-   allfilt
+    mygene = input$gene
+    allrefs(gene = mygene , pfiles = pfiles, genelocs = gloc_hg19)
    })#allrefs
   
 
@@ -157,12 +151,12 @@ tinyapp2 = function(con, genelocs) {
      tabPanel(igvShiny::igvShinyOutput("igvShiny_0"),
               #shinyFeedback::useShinyFeedback()
               ),
-    tabPanel("BAL",  DT::renderDT("BALstuff")),
-    tabPanel("BronchEpiBrush", DT::renderDT("BEBstuff")),
-    tabPanel("CD4stim", DT::renderDT("CD4stim")),
-    tabPanel("CD4Unstim", DT::renderDT("CD4Unstim")),
-    tabPanel("AlvMacphage", DT::renderDT("AlvMacphage")),
-    tabPanel("PaxRNA", DT::renderDT("PaxRNA")),
+    tabPanel("BAL",  DT::DTOutput("BALstuff")),
+    tabPanel("BronchEpiBrush", DT::DTOutput("BEBstuff")),
+    tabPanel("CD4stim", DT::DTOutput("CD4stim")),
+    tabPanel("CD4Unstim", DT::DTOutput("CD4Unstim")),
+    tabPanel("AlvMacphage", DT::DTOutput("AlvMacphage")),
+    tabPanel("PaxRNA", DT::DTOutput("PaxRNA")),
     tabPanel("about", helpText(h3("GGIpack Overview")),
              br(),
              p(sprintf(

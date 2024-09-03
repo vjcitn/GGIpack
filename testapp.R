@@ -1,6 +1,8 @@
 
 
 testapp = function() {
+  utils::data("gloc_hg19", package = "GGIpack")
+  con = DBI::dbConnect(duckdb::duckdb())
   patquetTableLoc <-system.file("extdata","parquetDataTable.csv", package = "GGIpack" )
   patquetTable <- utils::read.csv(patquetTableLoc) 
   genomeVersion <- "hg19"

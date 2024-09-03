@@ -129,12 +129,18 @@ dorounds = function(mydf) {
 
 #' Get all the datasets from each of the six celltypes in the ABRIG data.
 #' @param gene A gene  from the human genome.
+#' @param con  A duckdb connection
+#' @param genelocs  GenomicRanges instance
+#' @param pfiles
 #' @return A list of data table by type for the given gene.
 #' @examples
-#' allrefs(gene= 'DSP')
+#' pfiles <<- ABRIGparquet_paths()
+#' utils::data("gloc_hg19", package = "GGIpack")
+#' con = DBI::dbConnect(duckdb::duckdb())
+#' allrefs( con =con, gene = 'DSP', pfiles = pfiles, genelocs = gloc_hg19)
 #' @export
-allrefs = function(gene){
-  types = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
+allrefs = function(con, pfiles, genelocs, gene){
+  ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
             "AlvMacphage", "PaxRNA")
   allres = lapply(ttypes, function(x) ABRIGresource(con, x, pfiles=pfiles))
   allfilt = lapply(allres, function(x) filterByRange(x,

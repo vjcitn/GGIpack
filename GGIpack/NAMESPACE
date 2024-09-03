@@ -2,6 +2,7 @@
 
 export(ABRIGparquet_paths)
 export(ABRIGresource)
+export(allrefs)
 export(checkData)
 export(dorounds)
 export(filterByRange)
