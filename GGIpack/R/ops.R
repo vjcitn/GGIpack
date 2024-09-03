@@ -95,7 +95,6 @@ makeGWASTrack = function( name="NA", dat) {
 #' DBI::dbDisconnect(con)
 #' @export
 make_data_frame_from_tissue_and_gene = function(con, tissue, gene) {
-  #
   # add code to validate tissue and gene
   ll = ABRIGresource( con, tissue , pfiles= ABRIGparquet_paths())
   utils::data("gloc_hg19", package = "GGIpack")
@@ -125,3 +124,24 @@ dorounds = function(mydf) {
   mydf$statistic= round(mydf$statistic, 3)
   mydf |> dplyr::select(-score, -seqnames, -SNP)
 }
+
+
+
+#' Get all the datasets from each of the six celltypes in the ABRIG data.
+#' @param gene A gene  from the human genome.
+#' @return A list of data table by type for the given gene.
+#' @examples
+#' allrefs(gene= 'DSP')
+#' @export
+allrefs = function(gene){
+  types = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
+            "AlvMacphage", "PaxRNA")
+  allres = lapply(ttypes, function(x) ABRIGresource(con, x, pfiles=pfiles))
+  allfilt = lapply(allres, function(x) filterByRange(x,
+                                                     genelocs, gene, ggr_field="gene_name"))
+  names(allfilt) = ttypes
+  return(allfilt)
+}
+
+
+

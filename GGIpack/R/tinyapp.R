@@ -71,17 +71,6 @@ tinyapp2 = function(con, genelocs) {
    })#allrefs
   
 
- 
-  dorounds = function(mydf) {
-   mydf$P = formatC(mydf$P, format = "e", digits= 3)
-   mydf$SE = round(mydf$SE, 3)
-   mydf$MAF = round(mydf$MAF, 3)
-   mydf$BETA = round(mydf$BETA, 3)
-   mydf$FDR= round(mydf$FDR, 3)
-   mydf$statistic= round(mydf$statistic, 3)
-   mydf |> dplyr::select(-score, -seqnames, -SNP)
-   }#dorounds
-  
   
   output$BALstuff = DT::renderDT({
    refs = allrefs()
