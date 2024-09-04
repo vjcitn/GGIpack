@@ -59,9 +59,10 @@ tinyapp2 = function(con, genelocs) {
 ####################################################################
   
   allrefs = reactive({
-    req(input$gene)
+    req(c(input$gene, con, pfiles, genelocs ))
     mygene = input$gene
-    allrefs(gene = mygene , pfiles = pfiles, genelocs = gloc_hg19)
+     allData = GGIpack::allrefs( con =con, gene = mygene, pfiles =pfiles, genelocs = genelocs)
+    print(allData)
    })#allrefs
   
 

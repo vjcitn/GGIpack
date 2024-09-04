@@ -7,7 +7,7 @@
 make_data_frame_from_tissue_and_gene(con, tissue, gene)
 }
 \arguments{
-\item{con}{}
+\item{con}{is a DBI connection (typically duckdb)}
 
 \item{tissue}{character(1)}
 

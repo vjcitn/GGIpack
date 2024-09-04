@@ -9,7 +9,9 @@ allrefs(con, pfiles, genelocs, gene)
 \arguments{
 \item{con}{A duckdb connection}
 
-\item{genelocs}{}
+\item{pfiles}{list of absolute paths to the data for each tissue.}
+
+\item{genelocs}{GenomicRanges instance}
 
 \item{gene}{A gene  from the human genome.}
 }
@@ -20,7 +22,8 @@ A list of data table by type for the given gene.
 Get all the datasets from each of the six celltypes in the ABRIG data.
 }
 \examples{
-pfiles <<- ABRIGparquet_paths()
 utils::data("gloc_hg19", package = "GGIpack")
-allrefs(gene = 'DSP', pfiles = pfiles, genelocs = gloc_hg19)
+con = DBI::dbConnect(duckdb::duckdb())
+allrefs( con =con, gene = 'DSP', pfiles =ABRIGparquet_paths(), genelocs = gloc_hg19)
+DBI::dbDisconnect(con)
 }

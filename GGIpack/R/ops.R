@@ -85,7 +85,7 @@ makeGWASTrack = function( name="NA", dat) {
 }
 
 #' this makes a data.frame
-#' @param con 
+#' @param con is a DBI connection (typically duckdb)
 #' @param tissue character(1)
 #' @param gene character(1)
 #' @return a data frame filters by tissue and gene.
@@ -131,13 +131,13 @@ dorounds = function(mydf) {
 #' @param gene A gene  from the human genome.
 #' @param con  A duckdb connection
 #' @param genelocs  GenomicRanges instance
-#' @param pfiles
+#' @param pfiles list of absolute paths to the data for each tissue.
 #' @return A list of data table by type for the given gene.
 #' @examples
-#' pfiles <<- ABRIGparquet_paths()
 #' utils::data("gloc_hg19", package = "GGIpack")
 #' con = DBI::dbConnect(duckdb::duckdb())
-#' allrefs( con =con, gene = 'DSP', pfiles = pfiles, genelocs = gloc_hg19)
+#' allrefs( con =con, gene = 'DSP', pfiles =ABRIGparquet_paths(), genelocs = gloc_hg19)
+#' DBI::dbDisconnect(con)
 #' @export
 allrefs = function(con, pfiles, genelocs, gene){
   ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
