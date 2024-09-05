@@ -62,7 +62,6 @@ tinyapp2 = function(con, genelocs) {
     req(c(input$gene, con, pfiles, genelocs ))
     mygene = input$gene
      allData = GGIpack::allrefs( con =con, gene = mygene, pfiles =pfiles, genelocs = genelocs)
-    print(allData)
    })#allrefs
   
 
@@ -120,20 +119,20 @@ tinyapp2 = function(con, genelocs) {
    
    #names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
   
-  # observeEvent(input$gene, {
-   #  refs = allrefs()
+   observeEvent(input$gene, {
+     refs = allrefs()
    #  print(names(refs))
    #  print(refs[[1]]@tbl)
-     #for(i in 1:length(refs)){
-       # table = refs[[i]]@tbl |>  as.data.frame() 
-       # print(table)
-       #gwasTrack = makeGWASTrack( name=names(table)[i], dat = as.data.frame(dataToGraph))
-       #display(gwasTrack, session, id = "igvShiny_0")
-    # } #for loop
+     for(i in 1:length(refs)){
+        GenomicTable = refs[[i]]@tbl |>  as.data.frame() 
+       print(table)
+       gwasTrack = makeGWASTrack( name=names(GenomicTable), dat = GenomicTable)
+       display(gwasTrack, session, id = "igvShiny_0")
+     } #for loop
      #tableDn8like =  allfilt[[1]]@tbl |> as.data.frame() 
      #genomicRegion = paste0("chr", min(tableDn8like$CHR),":", formatC(min(tableDn8like$BP)-bpPadding , format="d", big.mark = ","), "-", formatC(max(tableDn8like$BP)+bpPadding, format="d", big.mark = ","), sep ="" )
      #showGenomicRegion(session, "igvShiny_0", genomicRegion)
-   #}) #observeEvent
+   }) #observeEvent
    
   # observeEvent(input$zoomButton,{
      
