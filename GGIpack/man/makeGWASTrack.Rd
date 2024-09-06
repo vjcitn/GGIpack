@@ -24,6 +24,7 @@ c("SNP", "CHR", "BP", "A1", "A2", "gene", "geneId", "statistic",
  It is  advised if the desired data does not have these column headers that the column headers need to be changed to the above.
 }
 \examples{
-dat = find_data()
-makeGWASTrack(dat = dat)
+con = DBI::dbConnect(duckdb::duckdb())
+nn = make_data_frame_from_tissue_and_gene(con, "BAL", "DSP")
+makeGWASTrack(dat = nn)
 }

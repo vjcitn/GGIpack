@@ -58,7 +58,7 @@ tinyapp2 = function(con, genelocs) {
 ## functions for the datatables
 ####################################################################
   
-  allrefs = reactive({
+  allCelltypes = reactive({
     req(c(input$gene, con, pfiles, genelocs ))
     mygene = input$gene
      allData = GGIpack::allrefs( con =con, gene = mygene, pfiles =pfiles, genelocs = genelocs)
@@ -67,32 +67,32 @@ tinyapp2 = function(con, genelocs) {
 
   
   output$BALstuff = DT::renderDT({
-   refs = allrefs()
+   refs = allCelltypes()
    refs[["BAL"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#BALstuff
   
   output$BEBstuff = DT::renderDT({
-   refs = allrefs()
+   refs = allCelltypes()
    refs[["BroncEpiBrush"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#BEBstuff
   
   output$CD4stim = DT::renderDT({
-   refs = allrefs()
+   refs = allCelltypes()
    refs[["CD4Stim"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    }) #CD4Stim
   
    output$CD4Unstim = DT::renderDT({
-   refs = allrefs()
+   refs = allCelltypes()
    refs[["CD4Unstim"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#CD4Unstim
    
    output$AlvMacphage = DT::renderDT({
-   refs = allrefs()
+   refs = allCelltypes()
    refs[["AlvMacphage"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    })#AlvMacphage
    
    output$PaxRNA = DT::renderDT({
-   refs = allrefs()
+   refs = allCelltypes()
    refs[["PaxRNA"]]@tbl |> dplyr::arrange(FDR) |> as.data.frame() |> dorounds()
    }) #paxRNA
    
@@ -120,7 +120,7 @@ tinyapp2 = function(con, genelocs) {
    #names(dataToGraph) = c("BAL", "BronchEpiBrush", "CD4stim","CD4Unstim", "AlvMacphage", "PaxRNA")
   
    observeEvent(input$gene, {
-     refs = allrefs()
+     refs = allCelltypes()
    #  print(names(refs))
    #  print(refs[[1]]@tbl)
      for(i in 1:length(refs)){
