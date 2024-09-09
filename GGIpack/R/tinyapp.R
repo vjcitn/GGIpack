@@ -121,7 +121,7 @@ tinyapp2 = function(con, genelocs) {
   
    observeEvent(input$gene, {
      refs = allCelltypes()
-   #  print(names(refs))
+     print(names(refs))
    #  print(refs[[1]]@tbl)
      for(i in 1:length(refs)){
         GenomicTable = refs[[i]]@tbl |>  as.data.frame() 

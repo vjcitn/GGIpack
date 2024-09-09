@@ -3,7 +3,7 @@
 #' @param con is a DBI connection (typically duckdb)
 #' @param tissue character(1)
 #' @param space character(1) e.g., "hg19"
-#' @param pfiles list of absoulte paths to the data for each tissue. 
+#' @param pfiles list of absolute paths to the data for each tissue. 
 #' @examples
 #' con = DBI::dbConnect(duckdb::duckdb())
 #' ll = ABRIGresource( con, "BAL" , pfiles= ABRIGparquet_paths())
