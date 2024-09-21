@@ -13,7 +13,7 @@ ABRIGresource(con, tissue, space = "hg19", pfiles)
 
 \item{space}{character(1) e.g., "hg19"}
 
-\item{pfiles}{list of absoulte paths to the data for each tissue.}
+\item{pfiles}{list of absolute paths to the data for each tissue.}
 }
 \value{
 ABRIGresource instance for the identified tissue

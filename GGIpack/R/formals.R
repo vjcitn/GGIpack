@@ -34,6 +34,14 @@ setClass("GTExresource", contains="ggiResource")
 #' @param con DBI connection
 #' @param space character(1) must indicate build
 #' @param pfile character(1) path to parquet file
+#' @examples
+#' fo = Sys.getenv("GGI_PARQUET_FOLDER")
+#' if (nchar(fo)>0) {
+#'   lungpa = file.path(fo, "lungpl05.parquet")
+#'   con = DBI::dbConnect(duckdb::duckdb())
+#'   lu = GTExresource(con, pfile=lungpa)
+#'   lu
+#' }
 #' @export
 GTExresource = function (con, space = "hg19", pfile) 
 {
