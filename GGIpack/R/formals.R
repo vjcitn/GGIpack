@@ -33,21 +33,23 @@ setClass("GTExresource", contains="ggiResource")
 #' constructor for GTEx examples
 #' @param con DBI connection
 #' @param space character(1) must indicate build
+#' @param tisstag character(1) string for tissue name
 #' @param pfile character(1) path to parquet file
 #' @examples
 #' fo = Sys.getenv("GGI_PARQUET_FOLDER")
 #' if (nchar(fo)>0) {
 #'   lungpa = file.path(fo, "lungpl05.parquet")
 #'   con = DBI::dbConnect(duckdb::duckdb())
-#'   lu = GTExresource(con, pfile=lungpa)
+#'   lu = GTExresource(con, tisstag="lung", pfile=lungpa)
 #'   lu
+#' # please do dbDisconnect(con) when done with 'lu'
 #' }
 #' @export
-GTExresource = function (con, space = "hg19", pfile) 
+GTExresource = function (con, space = "hg19", tisstag, pfile) 
 {
     pp = sprintf("read_parquet(%s)", sQuote(pfile))
     tb = tbl(con, pp)
-    ans = dplyr::mutate(tb, score = pvalue, seqnames = chromosome)
+    ans = dplyr::mutate(tb, score = pvalue, seqnames = chromosome, tissue=tisstag)
     new("GTExresource", space = space, tbl = ans)
 }
 

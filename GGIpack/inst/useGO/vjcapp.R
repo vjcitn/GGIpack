@@ -4,9 +4,9 @@ data("gloc_hg19", package="GGIpack")
 
 # set up data resources
 con = DBI::dbConnect(duckdb::duckdb())
-lungres = GTExresource(con, pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
+lungres = GTExresource(con, tisstag="lung", pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
     "lungpl05.parquet"))
-whblres = GTExresource(con, pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
+whblres = GTExresource(con, tisstag="wholebl", pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
     "wholeblpl05.parquet"))
 resl = list(lung=lungres, wholebl=whblres)
 

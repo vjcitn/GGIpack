@@ -4,12 +4,14 @@
 \alias{GTExresource}
 \title{constructor for GTEx examples}
 \usage{
-GTExresource(con, space = "hg19", pfile)
+GTExresource(con, space = "hg19", tisstag, pfile)
 }
 \arguments{
 \item{con}{DBI connection}
 
 \item{space}{character(1) must indicate build}
+
+\item{tisstag}{character(1) string for tissue name}
 
 \item{pfile}{character(1) path to parquet file}
 }
@@ -21,7 +23,7 @@ fo = Sys.getenv("GGI_PARQUET_FOLDER")
 if (nchar(fo)>0) {
   lungpa = file.path(fo, "lungpl05.parquet")
   con = DBI::dbConnect(duckdb::duckdb())
-  lu = GTExresource(con, pfile=lungpa)
+  lu = GTExresource(con, tisstag="lung", pfile=lungpa)
   lu
 }
 }
