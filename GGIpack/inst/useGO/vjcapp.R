@@ -58,7 +58,6 @@ server = function(input, output, session) {
 # based on gene selection, must be reactive (would not use 'head()' but 
 # a filter based on locations
   z = lapply(names(resl), function(x) {
-  print(x)
   output[[x]] = 
      DT::renderDataTable(resl[[x]]@tbl |> dplyr::filter(seqnames == as.character(local(input$chr))) |>
                 head(input$nrecs) |> as.data.frame() ) # |> DT::datatable())
