@@ -1,6 +1,8 @@
 library(GGIpack)
 library(shiny)
 data("gloc_hg19", package="GGIpack")
+load("ensg.rda")
+ensg = ensg[order(names(ensg))]
 
 # set up data resources
 con = DBI::dbConnect(duckdb::duckdb())
@@ -11,6 +13,13 @@ whblres = GTExresource(con, tisstag="wholebl", pfile=file.path(Sys.getenv("GGI_P
 resl = list(lung=lungres, wholebl=whblres)
 fvec = names(resl[[1]]@tbl |> head(2) |> as.data.frame())
 
+#selectizeInput('foo', choices = NULL, ...)
+#
+## in server
+#server <- function(input, output, session) {
+#  updateSelectizeInput(session, 'foo', choices = data, server = TRUE)
+#}
+
 # simple UI based on selections
 
 ui = fluidPage(
@@ -20,7 +29,15 @@ ui = fluidPage(
    checkboxGroupInput("respicks", "resources",
         choices=names(resl), selected=names(resl)[1]),
    numericInput("nrecs", "nrecs", min=5, max=1000, value=10), 
-   radioButtons("chr", "chr", choices=1:22, selected=1, inline=TRUE),
+   radioButtons("focus", "focus", choices=c("chr", "gene")),
+   conditionalPanel(
+    condition = "input.focus == 'chr'",
+    radioButtons("chr", "chr", choices=1:22, selected=1, inline=TRUE)
+    ),
+   conditionalPanel(
+    condition = "input.focus == 'gene'",
+    selectInput("gene", "gene", choices=NULL)
+    ),
    actionButton("stop", "stop app"),
    width=2
    ),
@@ -30,7 +47,8 @@ ui = fluidPage(
    )
   )
 
-server = function(input, output) {
+server = function(input, output, session) {
+  updateSelectizeInput(session, 'gene', choices = ensg, server = TRUE)
   observeEvent(input$stop, {
     DBI::dbDisconnect(con)
     stopApp()
