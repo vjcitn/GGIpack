@@ -20,6 +20,7 @@ ui = fluidPage(
    checkboxGroupInput("respicks", "resources",
         choices=names(resl), selected=names(resl)[1]),
    numericInput("nrecs", "nrecs", min=5, max=1000, value=10), 
+   radioButtons("chr", "chr", choices=1:22, selected=1, inline=TRUE),
    actionButton("stop", "stop app"),
    width=2
    ),
@@ -41,11 +42,16 @@ server = function(input, output) {
   z = lapply(names(resl), function(x) {
   print(x)
   output[[x]] = 
-     DT::renderDataTable(resl[[x]]@tbl |> head(input$nrecs) |> as.data.frame() ) # |> DT::datatable())
+     DT::renderDataTable(resl[[x]]@tbl |> dplyr::filter(seqnames == as.character(local(input$chr))) |>
+                head(input$nrecs) |> as.data.frame() ) # |> DT::datatable())
   })
+  output$theplot = renderPlot({ plot(1,1) })
 # communicate selected components to UI
   output$all = renderUI({
-   o = lapply(input$respicks, function(x) tabPanel(x, DT::dataTableOutput(x))) #output[[x]])
+   o = lapply(c(input$respicks, "viz"), function(x) {
+            if (x != "viz") tabPanel(x, DT::dataTableOutput(x))
+            else tabPanel("viz", shiny::plotOutput("theplot"))
+            })
    do.call(tabsetPanel, o)
   })
  }
