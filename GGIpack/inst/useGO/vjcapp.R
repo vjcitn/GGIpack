@@ -9,6 +9,7 @@ lungres = GTExresource(con, tisstag="lung", pfile=file.path(Sys.getenv("GGI_PARQ
 whblres = GTExresource(con, tisstag="wholebl", pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
     "wholeblpl05.parquet"))
 resl = list(lung=lungres, wholebl=whblres)
+fvec = names(resl[[1]]@tbl |> head(2) |> as.data.frame())
 
 # simple UI based on selections
 
@@ -17,7 +18,10 @@ ui = fluidPage(
   sidebarPanel(
    helpText("using gtex eqtl data"),
    checkboxGroupInput("respicks", "resources",
-        choices=names(resl), selected=names(resl)[1])
+        choices=names(resl), selected=names(resl)[1]),
+   numericInput("nrecs", "nrecs", min=5, max=1000, value=10), 
+   actionButton("stop", "stop app"),
+   width=2
    ),
   mainPanel(
    uiOutput("all")
@@ -26,6 +30,10 @@ ui = fluidPage(
   )
 
 server = function(input, output) {
+  observeEvent(input$stop, {
+    DBI::dbDisconnect(con)
+    stopApp()
+    })
 # prepare output components
 # for now very simple processing of tables, later, perform filtering
 # based on gene selection, must be reactive (would not use 'head()' but 
@@ -33,7 +41,7 @@ server = function(input, output) {
   z = lapply(names(resl), function(x) {
   print(x)
   output[[x]] = 
-     DT::renderDataTable(resl[[x]]@tbl |> head() |> as.data.frame() ) # |> DT::datatable())
+     DT::renderDataTable(resl[[x]]@tbl |> head(input$nrecs) |> as.data.frame() ) # |> DT::datatable())
   })
 # communicate selected components to UI
   output$all = renderUI({

@@ -18,6 +18,9 @@ GTExresource(con, space = "hg19", tisstag, pfile)
 \description{
 constructor for GTEx examples
 }
+\note{
+'score' is p-value
+}
 \examples{
 fo = Sys.getenv("GGI_PARQUET_FOLDER")
 if (nchar(fo)>0) {
@@ -25,5 +28,6 @@ if (nchar(fo)>0) {
   con = DBI::dbConnect(duckdb::duckdb())
   lu = GTExresource(con, tisstag="lung", pfile=lungpa)
   lu
+# please do dbDisconnect(con) when done with 'lu'
 }
 }

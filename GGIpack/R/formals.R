@@ -35,6 +35,7 @@ setClass("GTExresource", contains="ggiResource")
 #' @param space character(1) must indicate build
 #' @param tisstag character(1) string for tissue name
 #' @param pfile character(1) path to parquet file
+#' @note 'score' is p-value
 #' @examples
 #' fo = Sys.getenv("GGI_PARQUET_FOLDER")
 #' if (nchar(fo)>0) {
@@ -49,7 +50,9 @@ GTExresource = function (con, space = "hg19", tisstag, pfile)
 {
     pp = sprintf("read_parquet(%s)", sQuote(pfile))
     tb = tbl(con, pp)
-    ans = dplyr::mutate(tb, score = pvalue, seqnames = chromosome, tissue=tisstag)
+    ans = dplyr::mutate(tb, score = pvalue, seqnames = chromosome, tissue=tisstag,
+       start=position, end=position) |> select(tissue, variant, rsid, molecular_trait_id, score,
+            maf, beta, se, seqnames, ref, alt, start, end)
     new("GTExresource", space = space, tbl = ans)
 }
 
