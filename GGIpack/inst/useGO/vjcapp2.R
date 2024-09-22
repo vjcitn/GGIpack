@@ -28,7 +28,7 @@ ui = fluidPage(
    helpText("using gtex eqtl data"),
    checkboxGroupInput("respicks", "resources",
         choices=names(resl), selected=names(resl)[1]),
-   numericInput("nrecs", "nrecs", min=5, max=1000, value=10), 
+   numericInput("nrecs", "nrecs", min=5, max=100000, value=10000), 
    radioButtons("focus", "focus", choices=c("chr", "gene")),
    conditionalPanel(
     condition = "input.focus == 'chr'",
@@ -74,6 +74,7 @@ server = function(input, output, session) {
      DT::renderDataTable({
        if (input$focus == "chr")
          resl[[x]]@tbl |> dplyr::filter(seqnames == as.character(local(input$chr))) |>
+                dplyr::arrange(score) |>
                 head(input$nrecs) |> as.data.frame() 
        else if (input$focus == "gene") 
          resl[[x]]@tbl |> dplyr::filter(molecular_trait_id == as.character(local(input$gene))) |>
@@ -81,7 +82,18 @@ server = function(input, output, session) {
      })
     }
     )
-  output$theplot = renderPlot({ plot(1,1) })
+  output$theplot = renderPlot({ 
+    par(mfrow=c(length(input$respicks), 1))
+    for (x in input$respicks) {
+       if (input$focus == "chr")
+         dat = resl[[x]]@tbl |> dplyr::filter(seqnames == as.character(local(input$chr))) |>
+                head(input$nrecs) |> as.data.frame() 
+       else if (input$focus == "gene") 
+         dat = resl[[x]]@tbl |> dplyr::filter(molecular_trait_id == as.character(local(input$gene))) |>
+                as.data.frame() 
+       plot(dat$start, -log10(dat$score), main=x)
+       }
+    }, height=800L)
 # communicate selected components to UI
   output$all = renderUI({
    o = lapply(c(input$respicks, "viz"), function(x) {
