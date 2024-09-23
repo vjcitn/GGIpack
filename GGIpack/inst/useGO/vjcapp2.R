@@ -4,11 +4,18 @@ data("gloc_hg19", package="GGIpack")
 load("ensg.rda")
 ensg = ensg[order(names(ensg))]
 
+Sys.setenv("GGI_PARQUET_FOLDER"="/udd/stvjc")
+
 # set up data resources
 con = DBI::dbConnect(duckdb::duckdb())
-lungpa = ggi_gtex_cache("lungpl05.parquet")
+lungpa = try(ggi_gtex_cache("lungpl05.parquet"))
+if (inherits(lungpa, "try-error") | nchar(lungpa)==0)
+   lungpa = file.path(Sys.getenv("GGI_PARQUET_FOLDER"), "lungpl05.parquet")
 lungres = GTExresource(con, tisstag="lung", pfile=lungpa)
-whblres = GTExresource(con, tisstag="wholebl", pfile=ggi_gtex_cache("wholeblpl05.parquet"))
+wbpa = try(ggi_gtex_cache("wholeblpl05.parquet"))
+if (inherits(wbpa, "try-error") | nchar(wbpa)==0)
+   wbpa = file.path(Sys.getenv("GGI_PARQUET_FOLDER"), "wholeblpl05.parquet")
+whblres = GTExresource(con, tisstag="wholebl", pfile=wbpa)
 resl = list(lung=lungres, wholebl=whblres)
 fvec = names(resl[[1]]@tbl |> head(2) |> as.data.frame())
 
