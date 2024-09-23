@@ -6,10 +6,9 @@ ensg = ensg[order(names(ensg))]
 
 # set up data resources
 con = DBI::dbConnect(duckdb::duckdb())
-lungres = GTExresource(con, tisstag="lung", pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
-    "lungpl05.parquet"))
-whblres = GTExresource(con, tisstag="wholebl", pfile=file.path(Sys.getenv("GGI_PARQUET_FOLDER"),
-    "wholeblpl05.parquet"))
+lungpa = ggi_gtex_cache("lungpl05.parquet")
+lungres = GTExresource(con, tisstag="lung", pfile=lungpa)
+whblres = GTExresource(con, tisstag="wholebl", pfile=ggi_gtex_cache("wholeblpl05.parquet"))
 resl = list(lung=lungres, wholebl=whblres)
 fvec = names(resl[[1]]@tbl |> head(2) |> as.data.frame())
 
@@ -29,7 +28,7 @@ ui = fluidPage(
    checkboxGroupInput("respicks", "resources",
         choices=names(resl), selected=names(resl)[1]),
    numericInput("nrecs", "nrecs", min=5, max=100000, value=10000), 
-   radioButtons("focus", "focus", choices=c("chr", "gene")),
+   radioButtons("focus", "focus", choices=c("chr", "gene", "rsid")),
    conditionalPanel(
     condition = "input.focus == 'chr'",
     radioButtons("chr", "chr", choices=1:22, selected=1, inline=TRUE)
@@ -37,6 +36,10 @@ ui = fluidPage(
    conditionalPanel(
     condition = "input.focus == 'gene'",
     selectInput("gene", "gene", choices=NULL)
+    ),
+   conditionalPanel(
+    condition = "input.focus == 'rsid'",
+    textInput("snp", "snp")
     ),
    actionButton("stop", "stop app"),
    width=2
@@ -79,6 +82,9 @@ server = function(input, output, session) {
        else if (input$focus == "gene") 
          resl[[x]]@tbl |> dplyr::filter(molecular_trait_id == as.character(local(input$gene))) |>
                 as.data.frame() 
+       else if (input$focus == "rsid") 
+         dat = resl[[x]]@tbl |> dplyr::filter(rsid == as.character(local(input$snp))) |>
+                as.data.frame() 
      })
     }
     )
@@ -90,6 +96,9 @@ server = function(input, output, session) {
                 head(input$nrecs) |> as.data.frame() 
        else if (input$focus == "gene") 
          dat = resl[[x]]@tbl |> dplyr::filter(molecular_trait_id == as.character(local(input$gene))) |>
+                as.data.frame() 
+       else if (input$focus == "rsid") 
+         dat = resl[[x]]@tbl |> dplyr::filter(rsid == as.character(local(input$snp))) |>
                 as.data.frame() 
        plot(dat$start, -log10(dat$score), main=x)
        }
