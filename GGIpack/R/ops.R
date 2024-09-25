@@ -15,7 +15,7 @@ ABRIGresource = function(con, tissue, space="hg19", pfiles) {
    ttypes = c("BAL", "BroncEpiBrush", "CD4Stim", "CD4Unstim",
                   "AlvMacphage", "PaxRNA")
    stopifnot(tissue %in% ttypes)
-   ans = dplyr::tbl(con, pfiles[tissue]) |> dplyr::mutate(score=FDR, seqnames=CHR)
+   ans = dplyr::tbl(con, sprintf("read_parquet(%s)", sQuote(pfiles[tissue]))) |> dplyr::mutate(score=FDR, seqnames=CHR, start=BP, molecular_trait_id=gene, trait2=geneId)
    new("ABRIGresource", space=space, tbl=ans)
 }
 
