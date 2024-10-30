@@ -10,7 +10,7 @@
 #' @export
 vjcapp2 = function(){
 data("gloc_hg19", package="GGIpack")
-load("ensg.rda")
+utils::data("ensg", package = "GGIpack")
 ensg = ensg[order(names(ensg))]
 
 # set up data resources
@@ -83,3 +83,4 @@ server = function(input, output, session) {
  }
 
 runApp(list(ui=ui, server=server))
+}
