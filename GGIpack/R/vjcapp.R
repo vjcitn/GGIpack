@@ -1,5 +1,14 @@
-library(GGIpack)
-library(shiny)
+#' vjcapp app 
+#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
+#' @rawNamespace import(GenomicRanges, except=c(intersect, union, setdiff))
+#' @import igvShiny
+#' @import DT
+#' @examples
+#' if (interactive()){
+#' vjcapp()
+#' }
+#' @export
+vjcapp2 = function(){
 data("gloc_hg19", package="GGIpack")
 load("ensg.rda")
 ensg = ensg[order(names(ensg))]

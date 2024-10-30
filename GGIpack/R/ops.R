@@ -117,13 +117,18 @@ make_data_frame_from_tissue_and_gene = function(con, tissue, gene) {
 #' DBI::dbDisconnect(con)
 #' @export
 dorounds = function(mydf) {
-  mydf$P = formatC(mydf$P, format = "e", digits= 3)
-  mydf$SE = round(mydf$SE, 3)
-  mydf$MAF = round(mydf$MAF, 3)
-  mydf$BETA = round(mydf$BETA, 3)
-  mydf$FDR= round(mydf$FDR, 3)
-  mydf$statistic= round(mydf$statistic, 3)
-  mydf |> dplyr::select(-score, -seqnames, -SNP)
+  mydf = mydf |> as.data.frame()
+  #headerList  = lapply(mydf, class)
+  #headers = colnames(mydf)
+  for(i in 1:dim(mydf)[2]){
+    if(is.numeric(mydf[[i]])){
+      # I want to chane this and add the  change to scientific notation for p-values 
+      #or perhaps change it all to scientific notation?
+      mydf[[i]] = round(mydf[[i]], 3)
+      #mydf[[i]] = formatC(mydf[[i]], format = "e", digits= 3)
+    }# if  numeric statement
+  } #for loop
+  return(mydf)
 }
 
 
