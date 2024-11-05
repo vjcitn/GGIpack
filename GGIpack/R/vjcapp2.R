@@ -10,10 +10,10 @@
 #' @export
 vjcapp2 = function(){
   data("gloc_hg19", package="GGIpack")
-  load("ensg.rda")
+  utils::data("ensg", package = "GGIpack")
   ensg = ensg[order(names(ensg))]
   
-  Sys.setenv("GGI_PARQUET_FOLDER"="/udd/stvjc")
+  Sys.setenv("GGI_PARQUET_FOLDER"=tempdir())
   
   # set up data resources
   con = DBI::dbConnect(duckdb::duckdb())
