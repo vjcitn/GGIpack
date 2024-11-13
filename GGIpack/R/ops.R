@@ -77,10 +77,13 @@ checkData = function(path){
 #' makeGWASTrack(dat = nn)
 #' @export
 makeGWASTrack = function( name="NA", dat) {
-  ndat = names(dat)
-  pindex = which(ndat == "P")
-  bpindex = which(ndat == "BP")
-  chrindex = which(ndat == "CHR")
+  ndat = toupper(names(dat))
+  pindexHeaders = c("P", "SCORE")
+  bpindexHeaders = c("START", "BP")
+  chrindexHeader = c("CHR", "SEQNAMES")
+  pindex = which(ndat %in% pindexHeaders)
+  bpindex = which(ndat %in% bpindexHeaders)
+  chrindex = which(ndat %in% chrindexHeader)
   igvShiny::GWASTrack(trackName = name, data = dat, chrom.col=chrindex, pos.col = bpindex, 
                       pval.col = pindex)
 }
