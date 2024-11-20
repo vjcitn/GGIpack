@@ -2,6 +2,7 @@
 
 export(ABRIGparquet_paths)
 export(ABRIGresource)
+export(GGIexplore)
 export(GTExresource)
 export(allrefs)
 export(assoc_by_pos)
