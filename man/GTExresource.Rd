@@ -22,9 +22,9 @@ constructor for GTEx examples
 'score' is p-value
 }
 \examples{
-fo = Sys.getenv("GGI_PARQUET_FOLDER")
+fo = ggi_gtex_cache("lungpl05.parquet")
 if (nchar(fo)>0) {
-  lungpa = file.path(fo, "lungpl05.parquet")
+  lungpa = fo
   con = DBI::dbConnect(duckdb::duckdb())
   lu = GTExresource(con, tisstag="lung", pfile=lungpa)
   lu

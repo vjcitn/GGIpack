@@ -37,9 +37,9 @@ setClass("GTExresource", contains="ggiResource")
 #' @param pfile character(1) path to parquet file
 #' @note 'score' is p-value
 #' @examples
-#' fo = Sys.getenv("GGI_PARQUET_FOLDER")
+#' fo = ggi_gtex_cache("lungpl05.parquet")
 #' if (nchar(fo)>0) {
-#'   lungpa = file.path(fo, "lungpl05.parquet")
+#'   lungpa = fo
 #'   con = DBI::dbConnect(duckdb::duckdb())
 #'   lu = GTExresource(con, tisstag="lung", pfile=lungpa)
 #'   lu
@@ -48,7 +48,7 @@ setClass("GTExresource", contains="ggiResource")
 #' @export
 GTExresource = function (con, space = "hg19", tisstag, pfile) 
 {
-    pp = sprintf("read_parquet(%s)", sQuote(pfile))
+    pp = sprintf("read_parquet(%s)", sQuote(pfile, q=FALSE))
     tb = tbl(con, pp)
     ans = dplyr::mutate(tb, score = pvalue, seqnames = chromosome, tissue=tisstag,
        start=position, end=position) |> select(tissue, variant, rsid, molecular_trait_id, score,
