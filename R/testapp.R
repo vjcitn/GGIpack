@@ -43,6 +43,7 @@ testapp = function() {
     sidebarLayout(
       sidebarPanel(
         helpText("using gtex eqtl data"),
+ actionButton("addGwasTrackButton", "Add GWAS Track"),
         checkboxGroupInput("respicks", "resources",
                            choices=names(resl), selected=names(resl)[1]),
         numericInput("nrecs", "nrecs", min=5, max=100000, value=10000), 
@@ -71,14 +72,47 @@ testapp = function() {
   )
   
   server = function(input, output, session) {
+
+f <- system.file(package="igvShiny", "extdata", "gwas.RData")
+stopifnot(file.exists(f))
+tbl.gwas <- get(load(f))
+
     updateSelectizeInput(session, 'gene', choices = ensg, server = TRUE)
     observeEvent(input$stop, {
       DBI::dbDisconnect(con)
       stopApp()
     })#updateSelectizeInput
     
+
     
+server2 = function(input, output, session) {
+           
+
+  observeEvent(input$addGwasTrackButton, {
+    sprintf("---- addGWASTrack")
+    sprintf("current working directory: %s", getwd())
+    showGenomicRegion(session, id="igvShiny_0", "chr19:45,248,108-45,564,645")
+    loadGwasTrack(session, id="igvShiny_0", trackName="gwas", tbl=tbl.gwas, deleteTracksOfSameName=FALSE)
+  }) 
+ output$igvShiny_0 <- renderIgvShiny({
+    cat("--- starting renderIgvShiny\n");
+    genomeOptions <- parseAndValidateGenomeSpec(genomeName="hg38",  initialLocus=loci[7])
+    x <- igvShiny(genomeOptions,
+                  displayMode="SQUISHED",
+                  tracks=list()
+    )
+    cat("--- ending renderIgvShiny\n");
+    return(x)
+  })
     
+}  
+    
+  observeEvent(input$addGwasTrackButton, {
+    sprintf("---- addGWASTrack")
+    sprintf("current working directory: %s", getwd())
+    showGenomicRegion(session, id="igvShiny_0", "chr19:45,248,108-45,564,645")
+    loadGwasTrack(session, id="igvShiny_0", trackName="gwas", tbl=tbl.gwas, deleteTracksOfSameName=FALSE)
+  }) 
     
     ##igvshiny setup the baseline
     output$igvShiny_0 = igvShiny::renderIgvShiny({

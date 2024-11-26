@@ -34,10 +34,6 @@ ui = shinyUI(fluidPage(
       br(),
       actionButton("addGwasTrackButton", "Add GWAS Track"),
       
-#      div(style="background-color: white; width: 200px; height:30px; padding-left: 5px;
-#                   margin-top: 10px; border: 1px solid blue;",
-#          htmlOutput("chromLocDisplay")),
-#      hr(),
       width=2
     ),
     mainPanel(
@@ -51,6 +47,21 @@ ui = shinyUI(fluidPage(
 
 server = function(input, output, session) {
                        
+# add some code that can get and print a prespecified subtable of
+# lung gtex
+
+fo = ggi_gtex_cache("lungpl05.parquet")
+lungpa = fo
+con = DBI::dbConnect(duckdb::duckdb())
+lu = GTExresource(con, tisstag="lung", pfile=lungpa)
+mydat = lu@tbl |> head(50) |> as.data.frame()
+
+#
+# rename the columns of mydat appropriately so that they agree with tbl.gwas
+#
+
+# then assign this new table to "tbl.gwas"
+
 
   observeEvent(input$addGwasTrackButton, {
     #this sprintf function do not work but the code does make it here. 
