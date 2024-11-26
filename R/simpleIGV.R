@@ -1,6 +1,9 @@
 # derived from igvShiny demo file by Vince 20 Nov 2024
-
-#' app with a button to add specific GWAS track
+#' app with a button to add specific GWAS track'
+#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
+#' @rawNamespace import(GenomicRanges, except=c(intersect, union, setdiff))
+#' @import igvShiny
+#' @import DT
 #' @examples
 #' if (interactive()) {
 #'   simpleIGV()
@@ -50,6 +53,7 @@ server = function(input, output, session) {
                        
 
   observeEvent(input$addGwasTrackButton, {
+    #this sprintf function do not work but the code does make it here. 
     sprintf("---- addGWASTrack")
     sprintf("current working directory: %s", getwd())
     showGenomicRegion(session, id="igvShiny_0", "chr19:45,248,108-45,564,645")

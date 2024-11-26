@@ -2,12 +2,12 @@
 % Please edit documentation in R/simpleIGV.R
 \name{simpleIGV}
 \alias{simpleIGV}
-\title{app with a button to add specific GWAS track}
+\title{app with a button to add specific GWAS track'}
 \usage{
 simpleIGV()
 }
 \description{
-app with a button to add specific GWAS track
+app with a button to add specific GWAS track'
 }
 \examples{
 if (interactive()) {

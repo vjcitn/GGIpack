@@ -59,6 +59,7 @@ testapp = function() {
           condition = "input.focus == 'rsid'",
           textInput("snp", "snp")
         ),
+        actionButton("graphGWAS", "Graph GWAS"), 
         actionButton("stop", "stop app"),
         width=2
       ),
